@@ -23,7 +23,7 @@ export const useAuth = () => {
 
   const logout = () => {
     sessionStorage.setItem("user", "");
-    navigate("/login");
+    navigate("/");
   };
 
   const value = React.useMemo(() => ({ user, login, logout }), [user]);

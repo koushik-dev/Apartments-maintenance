@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 export const Flats = () => {
   const { user } = useAuth();
 
-  if (!user?.flat) return <Navigate to="/login" />;
+  if (!user?.flat) return <Navigate to="/" />;
 
   return (
     <Layout>

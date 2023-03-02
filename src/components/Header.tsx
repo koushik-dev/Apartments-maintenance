@@ -1,29 +1,24 @@
 import {
   AppBar,
-  Avatar,
   Box,
-  Button,
-  Divider,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
+  Theme,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
-import {
-  Logout,
-  Menu as MenuIcon,
-  Person,
-  PersonAdd,
-  Settings,
-} from "@mui/icons-material";
+import { Logout, Menu as MenuIcon, Person } from "@mui/icons-material";
 import React from "react";
 import { useStore } from "../Providers";
 import { ACTIONTYPES } from "../model";
 import { useAuth } from "../hooks/useAuth";
 
 export const Header = () => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
+
   const [{ flatDetails }, dispatch] = useStore();
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -63,9 +58,14 @@ export const Header = () => {
             Sai Adarshya Apartments
           </Typography>
           <Box display="flex" alignItems="center">
-            <Typography variant="body2">
-              {flatDetails.filter((flat) => flat.flat === user.flat)[0]?.tenant}
-            </Typography>
+            {matches ? (
+              <Typography variant="body2">
+                {
+                  flatDetails.filter((flat) => flat.flat === user.flat)[0]
+                    ?.tenant
+                }
+              </Typography>
+            ) : null}
             <IconButton sx={{ color: "white" }} onClick={handleClick}>
               <Person />
             </IconButton>

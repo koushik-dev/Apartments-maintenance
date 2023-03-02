@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Theme, useMediaQuery } from "@mui/material";
 import React from "react";
 import { Header, Footer, Sidebar } from ".";
 import { getFlatDetails, getCommon } from "../api";
@@ -9,6 +9,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [, dispatch] = useStore();
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
 
   React.useEffect(() => {
     getFlatDetails().then((data) =>
@@ -28,7 +29,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
       <Stack flex={1} mt={8}>
         <Box
           component="main"
-          p={3}
+          p={matches ? 3 : 1}
           sx={{
             flexGrow: 1,
             display: "flex",

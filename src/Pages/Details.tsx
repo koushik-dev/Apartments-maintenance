@@ -1,21 +1,23 @@
-import { AddCircleOutlined, Cancel, CheckCircle } from "@mui/icons-material";
+import { AddCircleOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
   Card,
   CardActionArea,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-  Fab,
-  Grid,
   List,
   ListSubheader,
   Stack,
   TextField,
+  Theme,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { updateCommon, updateReadings } from "../api";
 import { getMonth, water_lines } from "../constants";
 import { useWaterReadings } from "../hooks/useWaterReading";
@@ -23,6 +25,8 @@ import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 const Details = () => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [state, dispatch] = useStore();
   const [activeLine, setActiveLine] = React.useState<Record<string, number>>(
@@ -55,9 +59,11 @@ const Details = () => {
       dispatch({ type: ACTIONTYPES.FLATDETAILS, payload: data })
     );
     let details = calculate();
-    updateCommon({ ...state.commonDetails, ...details }).then((data) =>
-      dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
-    );
+    updateCommon({ ...state.commonDetails, ...details })
+      .then((data) =>
+        dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
+      )
+      .then((_) => navigate("/apartments/maintenance"));
   };
 
   const handleClose = (isAdd: boolean) => {
@@ -82,6 +88,7 @@ const Details = () => {
         <List
           sx={{
             width: "100%",
+            height: "100%",
             bgcolor: "background.paper",
           }}
           subheader={
@@ -143,7 +150,7 @@ const Details = () => {
                           {waterLines[line] || "-"}
                         </Typography>
                       </Stack>
-                      <AddCircleOutlined />
+                      {matches ? <AddCircleOutlined /> : null}
                     </Stack>
                   </CardActionArea>
                 </Card>
@@ -153,32 +160,32 @@ const Details = () => {
           </Box>
         </List>
       </Stack>
+
+      {/* Reading Modal */}
       <Dialog open={open} onClose={() => handleClose(false)}>
         <DialogTitle>
           Add Water Reading for - {Object.keys(activeLine)[0]}
         </DialogTitle>
         <DialogContent dividers>
-          <Grid container justifyContent="space-between">
-            <Grid item xs={7}>
-              <TextField
-                type="number"
-                fullWidth
-                label="Enter Reading"
-                onChange={({ target: { value } }) =>
-                  setActiveLine((line) => ({
-                    [Object.keys(line)[0]]: +value,
-                  }))
-                }
-              />
-            </Grid>
-            <Fab color="success" onClick={() => handleClose(true)}>
-              <CheckCircle />
-            </Fab>
-            <Fab color="error" onClick={() => handleClose(false)}>
-              <Cancel />
-            </Fab>
-          </Grid>
+          <TextField
+            type="number"
+            fullWidth
+            label="Enter Reading"
+            onChange={({ target: { value } }) =>
+              setActiveLine((line) => ({
+                [Object.keys(line)[0]]: +value,
+              }))
+            }
+          />
         </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => handleClose(false)}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={() => handleClose(true)}>
+            Add
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   );

@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import { User } from "../model";
 
 export const useAuth = () => {
   const navigate = useNavigate();
-  const [user, setUser] = React.useState(() => {
+  const [user, setUser] = React.useState<User>(() => {
     try {
       const userData = sessionStorage.getItem("user");
       if (userData) {

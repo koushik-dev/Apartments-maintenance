@@ -7,7 +7,7 @@ const initialState: IState = {
     total_water_usage: 0,
     individual_water_usage: {},
     individual_water_percentages: {},
-    expenses: [{ expense: "", reason: "", amount: 0 }],
+    expenses: [{ expense: "", reason: "", amount: 0, date: "" }],
     commonAmount: 0,
     waterAmount: 0,
   },
@@ -24,7 +24,6 @@ const initialState: IState = {
       water_reading: { current: {}, previous: {} },
     },
   ],
-  current_user: {},
 };
 
 const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
@@ -61,8 +60,6 @@ const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
           ),
         },
       };
-    case ACTIONTYPES.CURRENT_USER:
-      return { ...state, current_user: action.payload };
     default:
       return state;
   }

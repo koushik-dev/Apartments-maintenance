@@ -6,3 +6,4 @@ export { AmountInfo } from "./AmountInfo";
 export { Sidebar } from "./Sidebar";
 export { Modal as AddUserModal } from "./AddUser";
 export { Modal as AddExpenseModal } from "./AddExpense";
+export { ResetModal } from "./ResetModal";

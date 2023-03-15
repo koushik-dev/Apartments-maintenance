@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 const drawerWidth = 240;
@@ -57,7 +58,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export const Sidebar: React.FC = () => {
-  const [{ isSideBarOpen }] = useStore();
+  const [{ isSideBarOpen }, dispatch] = useStore();
   return (
     <Drawer
       variant="permanent"
@@ -96,6 +97,11 @@ export const Sidebar: React.FC = () => {
                 }}
                 component={Link}
                 to={route}
+                onClick={() =>
+                  dispatch({
+                    type: ACTIONTYPES.TOGGLESIDEBAR,
+                  })
+                }
               >
                 <ListItemIcon
                   sx={{

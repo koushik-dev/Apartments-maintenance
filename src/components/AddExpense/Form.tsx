@@ -22,7 +22,14 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     control,
     formState: { errors },
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      date: new Date().toISOString().split("T")[0],
+      expense: "",
+      reason: "",
+      amount: "",
+    },
+  });
 
   const onSubmit = (formValues: any) => {
     updateCommon({
@@ -118,6 +125,7 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           label={`Amount*`}
           {...register("amount", { required: true })}
         />
+        <TextField type="date" label={`Spent Date*`} {...register("date")} />
       </Stack>
       <Stack direction="row" gap={1} p={1.5} justifyContent="flex-end">
         <Button variant="outlined" onClick={onClose}>

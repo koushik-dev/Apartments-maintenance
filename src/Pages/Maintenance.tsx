@@ -8,7 +8,6 @@ import { useStore } from "../Providers";
 export const Maintenance = () => {
   const [state] = useStore();
   const navigate = useNavigate();
-
   const getMaintenanceRows = () =>
     state.flatDetails.map((flat) => ({
       ...flat,
@@ -22,10 +21,15 @@ export const Maintenance = () => {
 
   return (
     <Stack flex={1} gap={2}>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        gap={2}
+      >
         <Typography variant="h5">Maintenance For {getMonth()}</Typography>
         <Button
-          variant="contained"
+          variant="outlined"
           onClick={() => navigate("/apartments/details")}
         >
           Add Water Readings

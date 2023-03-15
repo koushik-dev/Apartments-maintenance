@@ -1,26 +1,18 @@
-import {
-  PersonAdd,
-  Settings,
-  Logout,
-  MoreVert,
-  Info,
-  Payment,
-} from "@mui/icons-material";
+import { MoreVert, Payment } from "@mui/icons-material";
 import {
   Menu,
   MenuItem,
-  Avatar,
-  Divider,
   ListItemIcon,
   IconButton,
   Tooltip,
+  Button,
 } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import React from "react";
 import { useNavigate } from "react-router";
 import { updateFlatDetails } from "../api";
 import { useAuth } from "../hooks/useAuth";
-import { ACTIONTYPES, FlatDetails } from "../model";
+import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 export const MaintenanceActions: React.FC<{
@@ -52,15 +44,13 @@ export const MaintenanceActions: React.FC<{
   return (
     <>
       <Tooltip title="View Details">
-        <IconButton
+        <Button
+          variant="outlined"
+          sx={{ minWidth: "5rem" }}
           onClick={() => navigate(`/apartments/splitup/${params.row.flat}`)}
-          size="large"
-          aria-controls={open ? "options" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
         >
-          <Info />
-        </IconButton>
+          Details
+        </Button>
       </Tooltip>
       <Tooltip title="Options">
         <IconButton

@@ -9,6 +9,7 @@ export type User = {
   flat: string;
   secret: string;
   isOwner: boolean;
+  isAdmin?: boolean;
 };
 
 export type FlatDetails = {
@@ -31,17 +32,17 @@ export type CommonExpense = {
   total_water_usage: number;
   individual_water_usage: Record<string, number>;
   individual_water_percentages: Record<string, number>;
-  expenses: { expense: string; reason?: string; amount: number }[];
+  expenses: {
+    expense: string;
+    reason?: string;
+    amount: number;
+    date: string;
+  }[];
 };
 export interface IState {
   isSideBarOpen: boolean;
   flatDetails: FlatDetails[];
   commonDetails: CommonExpense;
-  current_user: {
-    flat?: string;
-    secret?: string;
-    isAdmin?: boolean;
-  };
 }
 export interface IAction {
   type: ACTIONTYPES;

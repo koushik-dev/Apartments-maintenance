@@ -19,6 +19,8 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { updateCommon, updateReadings } from "../api";
+import { ResetModal } from "../components";
+import { ExcelExport } from "../components/ExcelExport";
 import { getMonth, water_lines } from "../constants";
 import { useWaterReadings } from "../hooks/useWaterReading";
 import { ACTIONTYPES } from "../model";
@@ -27,8 +29,9 @@ import { useStore } from "../Providers";
 const Details = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
   const [state, dispatch] = useStore();
+
+  const [open, setOpen] = React.useState(false);
   const [activeLine, setActiveLine] = React.useState<Record<string, number>>(
     {}
   );
@@ -101,18 +104,22 @@ const Details = () => {
               }}
             >
               <Typography>Water Readings of {getMonth()}</Typography>
-              <Button
-                variant="contained"
-                onClick={handleCalculate}
-                disabled={
-                  Object.values(waterLines).reduce(
-                    (a, v) => (v ? ++a : a),
-                    0
-                  ) !== 20
-                }
-              >
-                Calculate
-              </Button>
+              <Box display="flex" gap={2}>
+                <ExcelExport />
+                <ResetModal />
+                <Button
+                  variant="contained"
+                  onClick={handleCalculate}
+                  disabled={
+                    Object.values(waterLines).reduce(
+                      (a, v) => (v ? ++a : a),
+                      0
+                    ) !== 20
+                  }
+                >
+                  Calculate
+                </Button>
+              </Box>
             </ListSubheader>
           }
         >

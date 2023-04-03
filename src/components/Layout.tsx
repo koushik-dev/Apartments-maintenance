@@ -33,7 +33,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
           sx={{
             flexGrow: 1,
             display: "flex",
-            backgroundColor: "#e7ebef",
+            backgroundImage: `url(
+              "https://images.unsplash.com/photo-1574090524868-3aab11301e6a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1674&q=80"
+            )`,
+            backgroundSize: "cover",
           }}
         >
           {children}

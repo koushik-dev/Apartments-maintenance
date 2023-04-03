@@ -35,9 +35,10 @@ export const Home = () => {
       </Box>
       <Grid
         container
-        sx={{ background: "white", height: "100%" }}
+        sx={{ background: "#ffffff50", height: "100%" }}
         p={2}
         gap={2}
+        borderRadius={2}
       >
         <Grid item>
           <Card sx={{ p: 2 }} raised>

@@ -1,7 +1,7 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
-import { Table } from "../components";
+import { ExcelExport, Table } from "../components";
 import { getFlatTotalAmount, getMonth, MaintenanceCols } from "../constants";
 import { useStore } from "../Providers";
 
@@ -28,12 +28,15 @@ export const Maintenance = () => {
         gap={2}
       >
         <Typography variant="h5">Maintenance For {getMonth()}</Typography>
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/apartments/details")}
-        >
-          Add Water Readings
-        </Button>
+        <Box>
+          <ExcelExport />
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/apartments/details")}
+          >
+            Add Water Readings
+          </Button>
+        </Box>
       </Stack>
       <Table rows={getMaintenanceRows()} columns={MaintenanceCols} />
     </Stack>

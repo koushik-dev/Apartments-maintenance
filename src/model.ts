@@ -16,7 +16,7 @@ export type FlatDetails = {
   tenant: string;
   owner: string;
   flat: string;
-  contact_no: number;
+  contact_number: number;
   lastUpdated: string;
   overdue_amount: number;
   payment_status: string;

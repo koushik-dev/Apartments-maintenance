@@ -156,7 +156,7 @@ export const SplitUp = () => {
       <Typography variant="h5">
         Maintenance split up for flat: <b>{id}</b>
       </Typography>
-      <List sx={{ bgcolor: "background.paper" }}>
+      <List sx={{ bgcolor: "background.paper", borderRadius: 2 }}>
         {expenseDetails.map((exp) => (
           <ListItem key={exp.description} sx={{ py: 0 }}>
             <ListItemText primary={exp.description} secondary={exp.quantity} />

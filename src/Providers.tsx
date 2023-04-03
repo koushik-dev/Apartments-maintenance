@@ -1,5 +1,5 @@
 import React, { Reducer } from "react";
-import { ACTIONTYPES, IAction, IContext, IState } from "./model";
+import { ACTIONTYPES, FlatDetails, IAction, IContext, IState } from "./model";
 
 const initialState: IState = {
   isSideBarOpen: false,
@@ -16,7 +16,7 @@ const initialState: IState = {
       tenant: "",
       owner: "",
       flat: "",
-      contact_no: 0,
+      contact_number: 0,
       overdue_amount: 0,
       lastUpdated: "",
       payment_status: "",
@@ -26,6 +26,9 @@ const initialState: IState = {
   ],
 };
 
+const sortAlphaNum = (a: FlatDetails, b: FlatDetails) =>
+  a.flat.localeCompare(b.flat, "en", { numeric: true });
+
 const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
   switch (action.type) {
     case ACTIONTYPES.TOGGLESIDEBAR:
@@ -33,7 +36,7 @@ const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
     case ACTIONTYPES.FLATDETAILS:
       return {
         ...state,
-        flatDetails: action.payload,
+        flatDetails: [...action.payload].sort(sortAlphaNum),
       };
     case ACTIONTYPES.COMMONDETAILS:
       return {

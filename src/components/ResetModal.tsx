@@ -35,7 +35,7 @@ export const ResetModal = () => {
     <>
       {user.isAdmin ? (
         <Button variant="contained" color="error" onClick={() => setOpen(true)}>
-          Reset Readings
+          Reset Common Expenses
         </Button>
       ) : null}
       <Dialog open={open} onClose={() => handleClose(false)}>

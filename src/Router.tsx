@@ -1,6 +1,14 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Flats, Home, Login, Maintenance, People, SplitUp } from "./Pages";
+import {
+  ExpenseSheet,
+  Flats,
+  Home,
+  Login,
+  Maintenance,
+  People,
+  SplitUp,
+} from "./Pages";
 import Details from "./Pages/Details";
 
 const Router = () => {
@@ -14,6 +22,7 @@ const Router = () => {
           <Route path="maintenance" element={<Maintenance />} />
           <Route path="details" element={<Details />} />
           <Route path="splitup/:id" element={<SplitUp />} />
+          <Route path="expenses" element={<ExpenseSheet />} />
         </Route>
       </Routes>
     </BrowserRouter>

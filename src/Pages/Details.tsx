@@ -20,7 +20,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { updateCommon, updateReadings } from "../api";
 import { ResetModal } from "../components";
-import { ExcelExport } from "../components/ExcelExport";
 import { getMonth, water_lines } from "../constants";
 import { useWaterReadings } from "../hooks/useWaterReading";
 import { ACTIONTYPES } from "../model";
@@ -93,6 +92,7 @@ const Details = () => {
             width: "100%",
             height: "100%",
             bgcolor: "background.paper",
+            borderRadius: 2,
           }}
           subheader={
             <ListSubheader
@@ -105,7 +105,7 @@ const Details = () => {
             >
               <Typography>Water Readings of {getMonth()}</Typography>
               <Box display="flex" gap={2}>
-                <ExcelExport />
+                <Button onClick={() => setWaterLines({})}>Clear Values</Button>
                 <ResetModal />
                 <Button
                   variant="contained"

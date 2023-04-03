@@ -6,13 +6,10 @@ import { useStore } from "../Providers";
 
 export const ExcelExport = () => {
   const [{ flatDetails, commonDetails }] = useStore();
-  const sortAlphaNum = (a: FlatDetails, b: FlatDetails) =>
-    a.flat.localeCompare(b.flat, "en", { numeric: true });
 
   let commonExpenseTotal = 0;
-  const reading = [...flatDetails]
-    .sort(sortAlphaNum)
-    .reduce((acc: any[], { water_reading: { previous, current }, flat }) => {
+  const reading = [...flatDetails].reduce(
+    (acc: any[], { water_reading: { previous, current }, flat }) => {
       const meters = Object.keys(previous);
       const readings = meters.map((key) => ({
         Flat: flat,
@@ -23,50 +20,47 @@ export const ExcelExport = () => {
         "Consumption(End-Initial)": commonDetails.individual_water_usage[flat],
       }));
       return [...acc, ...readings];
-    }, []);
+    },
+    []
+  );
 
-  const sheet2 = [...flatDetails]
-    .sort(sortAlphaNum)
-    .map(({ flat, water_reading }) => {
-      const misc_expenses =
-        commonDetails.expenses.reduce(
-          (sum, v) =>
-            v.expense === "water_load_purchased" ? sum : v.amount + sum,
-          0
-        ) / 6;
+  const sheet2 = [...flatDetails].map(({ flat, water_reading }) => {
+    const misc_expenses =
+      commonDetails.expenses.reduce(
+        (sum, v) =>
+          v.expense === "water_load_purchased" ? sum : v.amount + sum,
+        0
+      ) / 6;
 
-      const start = Object.values(water_reading.previous).reduce(
-        (a, v) => a + v,
-        0
-      );
-      const end = Object.values(water_reading.current).reduce(
-        (a, v) => a + v,
-        0
-      );
-      const total = (
+    const start = Object.values(water_reading.previous).reduce(
+      (a, v) => a + v,
+      0
+    );
+    const end = Object.values(water_reading.current).reduce((a, v) => a + v, 0);
+    const total = (
+      +(
+        commonDetails.waterAmount *
+          (commonDetails.individual_water_percentages[flat] / 100) || 0
+      ).toFixed(1) + misc_expenses
+    ).toFixed(0);
+
+    return {
+      Flat: flat,
+      "Start Meter Reading": start,
+      "End Meter Reading": end,
+      "Consumption(End-Initial)": end - start,
+      "Percentage Consumption[Water consumed by flat/Total Consumed Water]":
+        commonDetails.individual_water_percentages[flat] + "%",
+      'Water Charges as per "%" consumption[percentage * Total cost of water]':
         +(
           commonDetails.waterAmount *
             (commonDetails.individual_water_percentages[flat] / 100) || 0
-        ).toFixed(1) + misc_expenses
-      ).toFixed(0);
-
-      return {
-        Flat: flat,
-        "Start Meter Reading": start,
-        "End Meter Reading": end,
-        "Consumption(End-Initial)": end - start,
-        "Percentage Consumption[Water consumed by flat/Total Consumed Water]":
-          commonDetails.individual_water_percentages[flat] + "%",
-        'Water Charges as per "%" consumption[percentage * Total cost of water]':
-          +(
-            commonDetails.waterAmount *
-              (commonDetails.individual_water_percentages[flat] / 100) || 0
-          ).toFixed(1),
-        "Misc. Expenses per flat[K/6]": misc_expenses,
-        "Total Expense for Each Flat": +total,
-        "Total Nearest 10": +total + (10 - (+total % 10)),
-      };
-    });
+        ).toFixed(1),
+      "Misc. Expenses per flat[K/6]": misc_expenses,
+      "Total Expense for Each Flat": +total,
+      "Total Nearest 10": +total + (10 - (+total % 10)),
+    };
+  });
 
   type SH1 = {
     "Expense Type": string;
@@ -154,7 +148,7 @@ export const ExcelExport = () => {
     ];
 
     utils.book_append_sheet(wb, ws3, "WaterReadings");
-    writeFile(wb, "Sai Adharshya Flats_Maintenance_Jan_202.xlsx");
+    writeFile(wb, "Sai Adharshya Flats_Maintenance.xlsx");
   };
   return <Button onClick={() => exportFile()}>Download</Button>;
 };

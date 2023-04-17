@@ -11,12 +11,17 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
     description: "An app to show apartments maintanence and other details.",
     icons: [
       {
+        src: "./src/assets/apartment_icon_192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
         src: "./src/assets/apartment_icon_512.png",
         sizes: "512x512",
         type: "image/png",
       },
       {
-        src: "./src/assets/apple-icon-180.png",
+        src: "./src/assets/apple-touch-icon.png",
         sizes: "180x180",
         type: "image/png",
         purpose: "apple touch icon",

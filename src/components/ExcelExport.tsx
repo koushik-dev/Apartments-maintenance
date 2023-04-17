@@ -109,8 +109,8 @@ export const ExcelExport = () => {
     /* Sheet 2 */
     const ws2 = utils.json_to_sheet(sheet2);
     ws2["!cols"] = [
-      {},
-      {},
+      { wch: 12 },
+      { wch: 12 },
       { wch: 20 },
       { wch: 20 },
       { wch: 18 },
@@ -139,7 +139,7 @@ export const ExcelExport = () => {
       { s: { r: 18, c: 5 }, e: { r: 20, c: 5 } },
     ];
     ws3["!cols"] = [
-      {},
+      { wch: 12 },
       { wch: 18 },
       { wch: 18 },
       { wch: 18 },

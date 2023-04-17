@@ -66,7 +66,7 @@ const MaintenanceCols: GridColDef[] = [
   {
     field: "actions",
     headerName: "Actions",
-    width: 120,
+    minWidth: 320,
     renderCell: (params) => <MaintenanceActions {...{ params }} />,
   },
 ];
@@ -101,11 +101,11 @@ export const getFlatTotalAmount = (
   waterAmount: number,
   commonAmount: number
 ) => {
-  return (
+  let total =
     overdue_amount +
     (individual_water_percentage / 100) * waterAmount +
-    commonAmount / 6
-  );
+    commonAmount / 6;
+  return +total + (10 - (+total % 10));
 };
 
 export { PeopleCols, MaintenanceCols };

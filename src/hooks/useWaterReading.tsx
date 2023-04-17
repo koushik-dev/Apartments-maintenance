@@ -11,7 +11,7 @@ export const useWaterReadings: (
   newReadings
 ) => {
   const getPercentage = (total: number, actual: number) => {
-    return (actual / total) * 100;
+    return +((actual / total) * 100).toFixed(2);
   };
 
   const calculate = () => {

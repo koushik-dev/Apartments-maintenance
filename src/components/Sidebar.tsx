@@ -1,4 +1,9 @@
-import { Home, Person, ReceiptLong } from "@mui/icons-material";
+import {
+  FormatListNumbered,
+  Home,
+  Person,
+  ReceiptLong,
+} from "@mui/icons-material";
 import {
   Box,
   CSSObject,
@@ -13,7 +18,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
@@ -58,7 +63,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export const Sidebar: React.FC = () => {
-  const [{ isSideBarOpen }, dispatch] = useStore();
+  const [{ isSideBarOpen }] = useStore();
+  const { pathname } = useLocation();
   return (
     <Drawer
       variant="permanent"
@@ -87,6 +93,11 @@ export const Sidebar: React.FC = () => {
               icon: <ReceiptLong />,
               route: "/apartments/maintenance",
             },
+            {
+              name: "Expenses",
+              icon: <FormatListNumbered />,
+              route: "/apartments/monthly-expenses",
+            },
           ].map(({ name, icon, route }) => (
             <ListItem key={name} disablePadding>
               <ListItemButton
@@ -97,11 +108,7 @@ export const Sidebar: React.FC = () => {
                 }}
                 component={Link}
                 to={route}
-                onClick={() =>
-                  dispatch({
-                    type: ACTIONTYPES.TOGGLESIDEBAR,
-                  })
-                }
+                selected={pathname === route}
               >
                 <ListItemIcon
                   sx={{

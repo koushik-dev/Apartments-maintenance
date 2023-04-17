@@ -114,7 +114,7 @@ export const SplitUp = () => {
         acc.push({
           description: details.reason,
           quantity: details.expense,
-          price: details.amount,
+          price: (details.amount / 6).toFixed(1),
         });
       }
       return acc;
@@ -157,8 +157,8 @@ export const SplitUp = () => {
         Maintenance split up for flat: <b>{id}</b>
       </Typography>
       <List sx={{ bgcolor: "background.paper", borderRadius: 2 }}>
-        {expenseDetails.map((exp) => (
-          <ListItem key={exp.description} sx={{ py: 0 }}>
+        {expenseDetails.map((exp, index) => (
+          <ListItem key={exp.description + index} sx={{ py: 0 }}>
             <ListItemText primary={exp.description} secondary={exp.quantity} />
             {exp.component}
             <ListItemText

@@ -1,11 +1,11 @@
-import { MoreVert, Payment } from "@mui/icons-material";
+import { ArrowDropDown, Payment } from "@mui/icons-material";
 import {
   Menu,
   MenuItem,
   ListItemIcon,
-  IconButton,
   Tooltip,
   Button,
+  Box,
 } from "@mui/material";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import React from "react";
@@ -43,26 +43,29 @@ export const MaintenanceActions: React.FC<{
   };
   return (
     <>
-      <Tooltip title="View Details">
-        <Button
-          variant="outlined"
-          sx={{ minWidth: "5rem" }}
-          onClick={() => navigate(`/apartments/splitup/${params.row.flat}`)}
-        >
-          Details
-        </Button>
-      </Tooltip>
-      <Tooltip title="Options">
-        <IconButton
-          onClick={handleClick}
-          size="large"
-          aria-controls={open ? "options" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-        >
-          <MoreVert />
-        </IconButton>
-      </Tooltip>
+      <Box display={"flex"} gap={2}>
+        <Tooltip title="View Details">
+          <Button
+            variant="outlined"
+            sx={{ minWidth: "5rem" }}
+            onClick={() => navigate(`/apartments/splitup/${params.row.flat}`)}
+          >
+            Details
+          </Button>
+        </Tooltip>
+        <Tooltip title="Options">
+          <Button
+            variant="outlined"
+            onClick={handleClick}
+            aria-controls={open ? "options" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
+            Actions
+            <ArrowDropDown />
+          </Button>
+        </Tooltip>
+      </Box>
       {user?.isAdmin ? (
         <Menu
           anchorEl={anchorEl}

@@ -3,8 +3,12 @@ import react from "@vitejs/plugin-react";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
-  registerType: "prompt",
+  registerType: "autoUpdate",
+  strategies: "injectManifest",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
+  devOptions: {
+    enabled: true,
+  },
   manifest: {
     name: "Sai adarshya apartments",
     short_name: "adarshya",

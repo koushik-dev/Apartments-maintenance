@@ -4,7 +4,7 @@ import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
   registerType: "autoUpdate",
-  strategies: "generateSW",
+  strategies: "injectManifest",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
   devOptions: {
     enabled: true,

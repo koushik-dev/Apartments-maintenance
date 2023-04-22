@@ -15,6 +15,10 @@ export const Home = () => {
   const payment_status = flatDetails.filter((f) => f.flat === user.flat)?.[0]
     ?.payment_status;
 
+  const postMsg = () => {
+    navigator.serviceWorker.controller?.postMessage("new message posted!!");
+  };
+
   return (
     <Stack flex={1} direction="column" gap={2}>
       <Box
@@ -25,7 +29,7 @@ export const Home = () => {
       >
         <Typography variant="h4">Dashboard</Typography>
         <Stack direction="row" gap={2}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
+          <Button variant="contained" onClick={() => postMsg()}>
             Add User
           </Button>
           <Button variant="contained" onClick={() => setOpenExp(true)}>

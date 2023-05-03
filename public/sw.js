@@ -1,7 +1,7 @@
-self.addEventListener("push", function (e) {
+self.addEventListener("message", function (e) {
   console.log(e);
   self.registration.showNotification("Test Notification title", {
-    body: "New Maintenance bill added to the apartments",
+    body: e.data,
     badge: "/apartment_icon_192.png",
   });
 });

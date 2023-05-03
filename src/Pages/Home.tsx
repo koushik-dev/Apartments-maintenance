@@ -3,6 +3,16 @@ import React from "react";
 import { AddExpenseModal, AddUserModal } from "../components";
 import { useAuth } from "../hooks/useAuth";
 import { useStore } from "../Providers";
+import {
+  getFirestore,
+  getDocs,
+  doc,
+  collection,
+  serverTimestamp,
+  addDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../firebase";
 
 export const Home = () => {
   const [{ flatDetails }] = useStore();
@@ -15,8 +25,11 @@ export const Home = () => {
   const payment_status = flatDetails.filter((f) => f.flat === user.flat)?.[0]
     ?.payment_status;
 
-  const postMsg = () => {
-    navigator.serviceWorker.controller?.postMessage("new message posted!!");
+  const postMsg = async () => {
+    addDoc(collection(db, "notifications"), {
+      message: "added maintanence",
+      timeStamp: serverTimestamp(),
+    }).then((v) => console.log("Notification added."));
   };
 
   return (

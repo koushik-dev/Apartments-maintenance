@@ -13,8 +13,8 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
     enabled: true,
   },
   manifest: {
-    name: "Sai adarshya apartments",
-    short_name: "adarshya",
+    name: "Sai Adarshya Apartments🏡",
+    short_name: "Adarshya",
     description: "An app to show apartments maintanence and other details.",
     icons: [
       {

@@ -1,6 +1,8 @@
 import React, { Reducer } from "react";
 import { ACTIONTYPES, FlatDetails, IAction, IContext, IState } from "./model";
 
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "./firebase";
 const initialState: IState = {
   isSideBarOpen: false,
   commonDetails: {
@@ -74,6 +76,25 @@ export const useStore = () => React.useContext(AppContext);
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+  const ref = React.useRef<any>(null);
+  React.useEffect(() => {
+    Notification.requestPermission();
+    if (!ref.current) {
+      const coll = collection(db, "notifications");
+      ref.current = onSnapshot(coll, (doc) => {
+        doc.forEach((d) => {
+          navigator.serviceWorker.ready.then((reg) =>
+            reg.active?.postMessage("newo messago")
+          );
+          // navigator.serviceWorker.getRegistration().then((re) =>
+          //   re?.showNotification("new notification", {
+          //     body: "javascript react notification",
+          //   })
+          // );
+        });
+      });
+    }
+  }, []);
 
   return (
     <AppContext.Provider value={[state, dispatch]}>

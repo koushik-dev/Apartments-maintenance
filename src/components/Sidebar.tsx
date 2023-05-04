@@ -63,7 +63,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export const Sidebar: React.FC = () => {
-  const [{ isSideBarOpen }] = useStore();
+  const [{ isSideBarOpen }, dispatch] = useStore();
   const { pathname } = useLocation();
   return (
     <Drawer
@@ -106,6 +106,11 @@ export const Sidebar: React.FC = () => {
                   justifyContent: isSideBarOpen ? "initial" : "center",
                   px: 2.5,
                 }}
+                onClick={() =>
+                  window.innerWidth <= 900
+                    ? dispatch({ type: ACTIONTYPES.TOGGLESIDEBAR })
+                    : null
+                }
                 component={Link}
                 to={route}
                 selected={pathname === route}

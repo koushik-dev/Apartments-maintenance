@@ -42,8 +42,7 @@ export const ResetModal = () => {
         <DialogTitle>Clearing Old Values</DialogTitle>
         <DialogContent dividers>
           <Typography>
-            Are you sure you want to delete the last month's expenses and
-            readings?
+            Are you sure you want to delete the last month's expenses?
           </Typography>
         </DialogContent>
         <DialogActions>

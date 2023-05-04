@@ -85,7 +85,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         navigator.serviceWorker.ready.then((reg) =>
           reg.active?.postMessage({
             title: doc.docs.at(doc.size - 1)?.data().title,
-            body: doc.docs.at(doc.size - 1)?.data().message,
+            message: doc.docs.at(doc.size - 1)?.data().message,
           })
         );
         doc.forEach((d) => {

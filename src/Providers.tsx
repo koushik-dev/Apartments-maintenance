@@ -82,10 +82,13 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (!ref.current) {
       const coll = collection(db, "notifications");
       ref.current = onSnapshot(coll, (doc) => {
+        navigator.serviceWorker.ready.then((reg) =>
+          reg.active?.postMessage({
+            title: doc.docs.at(doc.size - 1)?.data().title,
+            body: doc.docs.at(doc.size - 1)?.data().message,
+          })
+        );
         doc.forEach((d) => {
-          navigator.serviceWorker.ready.then((reg) =>
-            reg.active?.postMessage("newo messago")
-          );
           // navigator.serviceWorker.getRegistration().then((re) =>
           //   re?.showNotification("new notification", {
           //     body: "javascript react notification",

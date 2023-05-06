@@ -1,4 +1,5 @@
 export enum ACTIONTYPES {
+  SIDEBAR = "sidebar",
   TOGGLESIDEBAR = "togglesidebar",
   FLATDETAILS = "flatdetails",
   COMMONDETAILS = "commondetails",

@@ -1,23 +1,13 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
-import { ExcelExport, Table } from "../components";
-import { getFlatTotalAmount, getMonth, MaintenanceCols } from "../constants";
+import { ExcelExport, MaintenanceCard } from "../components";
+import { getMonth } from "../constants";
 import { useStore } from "../Providers";
 
 export const Maintenance = () => {
   const [state] = useStore();
   const navigate = useNavigate();
-  const getMaintenanceRows = () =>
-    state.flatDetails.map((flat) => ({
-      ...flat,
-      totalAmount: getFlatTotalAmount(
-        flat.overdue_amount,
-        state.commonDetails.individual_water_percentages[flat.flat] || 0,
-        state.commonDetails.waterAmount,
-        state.commonDetails.commonAmount
-      ),
-    }));
 
   return (
     <Stack flex={1} gap={2}>
@@ -38,7 +28,27 @@ export const Maintenance = () => {
           </Button>
         </Box>
       </Stack>
-      <Table rows={getMaintenanceRows()} columns={MaintenanceCols} />
+      <Stack
+        display={"grid"}
+        gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+        gap={2}
+      >
+        {state.flatDetails.map((flat) => (
+          <MaintenanceCard
+            name={flat.tenant}
+            flat={flat.flat}
+            overdueAmount={flat.overdue_amount}
+            commonAmount={(state.commonDetails.commonAmount / 6).toFixed(0)}
+            waterAmount={
+              (state.commonDetails.waterAmount *
+                (state.commonDetails.individual_water_percentages[flat.flat] ||
+                  0)) /
+              100
+            }
+            status={flat.payment_status}
+          />
+        ))}
+      </Stack>
     </Stack>
   );
 };

@@ -108,7 +108,7 @@ export const Sidebar: React.FC = () => {
                 }}
                 onClick={() =>
                   window.innerWidth <= 900
-                    ? dispatch({ type: ACTIONTYPES.TOGGLESIDEBAR })
+                    ? dispatch({ type: ACTIONTYPES.SIDEBAR, payload: false })
                     : null
                 }
                 component={Link}

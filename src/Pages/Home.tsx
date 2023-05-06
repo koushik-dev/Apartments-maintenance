@@ -3,15 +3,7 @@ import React from "react";
 import { AddExpenseModal, AddUserModal } from "../components";
 import { useAuth } from "../hooks/useAuth";
 import { useStore } from "../Providers";
-import {
-  getFirestore,
-  getDocs,
-  doc,
-  collection,
-  serverTimestamp,
-  addDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, serverTimestamp, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const Home = () => {
@@ -40,7 +32,7 @@ export const Home = () => {
         flexWrap={"wrap"}
         gap={2}
       >
-        <Typography variant="h4">Dashboard</Typography>
+        <Typography variant="h5">Dashboard</Typography>
         <Stack direction="row" gap={2}>
           <Button variant="contained" onClick={() => postMsg()}>
             Add User

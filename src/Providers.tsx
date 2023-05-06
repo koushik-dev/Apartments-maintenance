@@ -33,6 +33,8 @@ const sortAlphaNum = (a: FlatDetails, b: FlatDetails) =>
 
 const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
   switch (action.type) {
+    case ACTIONTYPES.SIDEBAR:
+      return { ...state, isSideBarOpen: action.payload };
     case ACTIONTYPES.TOGGLESIDEBAR:
       return { ...state, isSideBarOpen: !state.isSideBarOpen };
     case ACTIONTYPES.FLATDETAILS:

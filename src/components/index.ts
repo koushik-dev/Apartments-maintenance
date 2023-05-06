@@ -8,3 +8,4 @@ export { Modal as AddUserModal } from "./AddUser";
 export { Modal as AddExpenseModal } from "./AddExpense";
 export { ResetModal } from "./ResetModal";
 export { ExcelExport } from "./ExcelExport";
+export { MaintenanceCard } from "./MaintenanceCard";

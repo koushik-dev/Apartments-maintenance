@@ -25,7 +25,7 @@ import { ACTIONTYPES, FlatDetails } from "../../model";
 import { useStore } from "../../Providers";
 
 export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [, dispatch] = useStore();
+  const [state, dispatch] = useStore();
   const {
     register,
     handleSubmit,
@@ -39,12 +39,12 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const details: Partial<FlatDetails> = {
       ...values,
       tenant: [firstname, lastname].join(" "),
-      ...(values.isOwner ? { owner: [firstname, lastname].join(" ") } : {}),
-      ...(values.isOwner
-        ? { owner_contact_number: values.contact_number }
-        : {}),
+      // ...(values.isOwner ? { owner: [firstname, lastname].join(" ") } : {}),
+      // ...(values.isOwner
+      //   ? { owner_contact_number: values.contact_number }
+      //   : {}),
       water_reading: { previous: {}, current: {} },
-      payment_status: "Paid",
+      payment_status: "Pending",
       overdue_amount: 0,
     };
     addFlatDetails(details).then((data) => {
@@ -52,6 +52,11 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       onClose();
     });
   };
+
+  const getFlat = (flat: string) => {
+    return state.flatDetails.filter((f) => f.flat === flat)[0];
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Stack gap={2} px={3} pb={3} pt={2}>
@@ -85,12 +90,6 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               </FormControl>
             )}
           />
-          <FormControlLabel
-            sx={{ flex: 1 }}
-            control={<Checkbox />}
-            label="Owner"
-            {...register("isOwner")}
-          />
         </Stack>
         <Grid container gap={2}>
           <Grid item flex={1}>
@@ -118,8 +117,8 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <TextField
           type="number"
           label="Owner Contact No."
-          {...register("owner_contact_number")}
-          disabled={watch("isOwner")}
+          value={getFlat(watch("flat"))?.owner_contact_number || ""}
+          disabled={true}
         />
         <Divider textAlign="left">
           Add Vehicles

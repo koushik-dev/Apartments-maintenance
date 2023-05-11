@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { updateCommon } from "../api";
 import { AddExpenseModal, ResetModal } from "../components";
+import { getMonth } from "../constants";
 import { useScreenSize } from "../hooks/useScreenSize";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
@@ -67,24 +68,32 @@ export const Expenses = () => {
             width: "100%",
             left: 0,
             borderRadius: 0,
-            height: 45,
+            height: 54,
             zIndex: 1,
           }}
         >
           Add Expense
         </Button>
       ) : null}
-      <Stack flex={1} gap={2}>
-        <Box display={"flex"} justifyContent={"right"} gap={2}>
-          {isMobile ? null : (
-            <Button variant="contained" onClick={triggerAdd}>
-              Add Expense
-            </Button>
-          )}
-          <ResetModal />
+      <Stack flex={1} gap={2} pb={isMobile ? 7 : 0}>
+        <Box
+          display={"flex"}
+          alignItems="center"
+          justifyContent={"space-between"}
+        >
+          {/* Expenses */}
+          <Typography variant="h5">
+            Expenses for {getMonth(commonDetails.expenses[0].date)} month
+          </Typography>
+          <Box display={"flex"} justifyContent={"right"} gap={2}>
+            {isMobile ? null : (
+              <Button variant="contained" onClick={triggerAdd}>
+                Add Expense
+              </Button>
+            )}
+            <ResetModal />
+          </Box>
         </Box>
-        {/* Expenses */}
-        <Typography variant="h5">Expenses</Typography>
         <Box
           sx={{
             borderRadius: 2,

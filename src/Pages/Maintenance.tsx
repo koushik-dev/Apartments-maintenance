@@ -1,6 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { Box, Button, Fab, Stack, Typography } from "@mui/material";
-import React from "react";
+import { Box, Fab, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import { ExcelExport, MaintenanceCard } from "../components";
 import { getMonth } from "../constants";
@@ -20,7 +19,9 @@ export const Maintenance = () => {
         flexWrap="wrap"
         gap={2}
       >
-        <Typography variant="h5">Maintenance For {getMonth()}</Typography>
+        <Typography variant="h5">
+          Maintenance For {getMonth(state.commonDetails.expenses[0].date)}
+        </Typography>
         <Box>
           <ExcelExport />
           <Fab
@@ -31,8 +32,8 @@ export const Maintenance = () => {
               isMobile
                 ? {
                     position: "absolute",
-                    bottom: 12,
-                    right: 16,
+                    bottom: 24,
+                    right: 24,
                     backgroundColor: "#8757d1",
                   }
                 : { backgroundColor: "#8757d1" }
@@ -47,6 +48,7 @@ export const Maintenance = () => {
         display={"grid"}
         gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
         gap={2}
+        pb={isMobile ? 6 : 0}
       >
         {state.flatDetails.map((flat) => (
           <MaintenanceCard

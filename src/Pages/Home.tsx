@@ -1,18 +1,14 @@
 import { Box, Button, Card, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
-import { AddExpenseModal, AddUserModal } from "../components";
 import { useAuth } from "../hooks/useAuth";
 import { useStore } from "../Providers";
 import { collection, serverTimestamp, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { getMonth } from "../constants";
 
 export const Home = () => {
-  const [{ flatDetails }] = useStore();
+  const [{ flatDetails, commonDetails }] = useStore();
   const { user } = useAuth();
-  const [open, setOpen] = React.useState(false);
-  const [openExp, setOpenExp] = React.useState(false);
-  const onClose = () => setOpen(false);
-  const onCloseExp = () => setOpenExp(false);
 
   const payment_status = flatDetails.filter((f) => f.flat === user.flat)?.[0]
     ?.payment_status;
@@ -33,14 +29,7 @@ export const Home = () => {
         gap={2}
       >
         <Typography variant="h5">Dashboard</Typography>
-        <Stack direction="row" gap={2}>
-          <Button variant="contained" onClick={() => postMsg()}>
-            Add User
-          </Button>
-          <Button variant="contained" onClick={() => setOpenExp(true)}>
-            Add Expense
-          </Button>
-        </Stack>
+        <Stack direction="row" gap={2}></Stack>
       </Box>
       <Grid
         container
@@ -51,7 +40,10 @@ export const Home = () => {
       >
         <Grid item>
           <Card sx={{ p: 2 }} raised>
-            <Typography variant="body1">Maintenance Payment Status</Typography>
+            <Typography variant="body1">
+              {getMonth(commonDetails.expenses[0].date)} month Maintenance
+              Payment Status
+            </Typography>
             <hr />
             <Typography
               variant="body1"
@@ -66,18 +58,22 @@ export const Home = () => {
             </Typography>
           </Card>
         </Grid>
-        <Grid item flex={1}>
+        <Grid item>
           <Card sx={{ p: 2 }} raised>
             <Typography variant="body1">Notifications</Typography>
             <hr />
             <Typography variant="body2">
               - Initiated Metro Water connection process
             </Typography>
+            <Typography variant="body2">
+              - Initiated Sewage connection process
+            </Typography>
+            <Typography variant="body2">
+              - Initiated CCTV connection process
+            </Typography>
           </Card>
         </Grid>
       </Grid>
-      <AddUserModal {...{ open, onClose }} />
-      <AddExpenseModal {...{ open: openExp, onClose: onCloseExp }} />
     </Stack>
   );
 };

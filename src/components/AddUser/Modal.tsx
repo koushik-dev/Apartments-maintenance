@@ -15,7 +15,7 @@ export const Modal: React.FC<DialogProps & { onClose: () => void }> = ({
 }) => {
   return (
     <Dialog {...{ open, onClose }} fullWidth>
-      <DialogTitle>Change Resident</DialogTitle>
+      <DialogTitle>Add Resident</DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         <Form {...{ onClose }} />
       </DialogContent>

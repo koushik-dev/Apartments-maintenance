@@ -18,6 +18,7 @@ export type FlatDetails = {
   owner: string;
   flat: string;
   contact_number: number;
+  owner_contact_number: string;
   lastUpdated: string;
   overdue_amount: number;
   payment_status: string;

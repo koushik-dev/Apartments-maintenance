@@ -103,7 +103,7 @@ const Details = () => {
           alignItems="center"
           justifyContent={"space-between"}
         >
-          <Typography>Water Readings of {getMonth()}</Typography>
+          <Typography variant="h5">Water Readings of {getMonth()}</Typography>
           <Box display="flex" gap={2}>
             <Button variant="outlined" onClick={() => setWaterLines({})}>
               Clear Readings

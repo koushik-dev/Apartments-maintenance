@@ -39,9 +39,9 @@ export const MaintenanceCard: React.FC<{
         borderRadius: "0.5rem",
         boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px",
       }}
-      p={3}
+      p={2.5}
       display="grid"
-      gridTemplateColumns={"1fr 1fr"}
+      gridTemplateColumns={"2fr 1fr"}
       gap={1}
     >
       <Box>

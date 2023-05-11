@@ -93,8 +93,10 @@ export const water_lines = [
   "S3C",
 ];
 export const Flats = ["F1", "F2", "F3", "S1", "S2", "S3"];
-export const getMonth = () =>
-  new Date().toLocaleString("en-US", { month: "long" });
+export const getMonth = (date?: string) =>
+  (date ? new Date(date) : new Date()).toLocaleString("en-US", {
+    month: "long",
+  });
 export const getFlatTotalAmount = (
   overdue_amount: number,
   individual_water_percentage: number,

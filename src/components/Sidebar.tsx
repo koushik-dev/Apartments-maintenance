@@ -1,7 +1,7 @@
 import {
   FormatListNumbered,
+  Group,
   Home,
-  Person,
   ReceiptLong,
 } from "@mui/icons-material";
 import {
@@ -18,7 +18,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import React from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
@@ -84,8 +84,8 @@ export const Sidebar: React.FC = () => {
               route: "/apartments/dashboard",
             },
             {
-              name: "People",
-              icon: <Person />,
+              name: "Residents",
+              icon: <Group />,
               route: "/apartments/people",
             },
             {

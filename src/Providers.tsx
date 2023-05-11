@@ -19,6 +19,7 @@ const initialState: IState = {
       owner: "",
       flat: "",
       contact_number: 0,
+      owner_contact_number: "0",
       overdue_amount: 0,
       lastUpdated: "",
       payment_status: "",

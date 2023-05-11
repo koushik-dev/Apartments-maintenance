@@ -26,6 +26,18 @@ const theme = createTheme({
         }),
       },
     },
+    MuiFab: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          ...(ownerState.color === "primary" && {
+            backgroundColor: "#8757d1",
+            ":hover": {
+              backgroundColor: "#9b80c4",
+            },
+          }),
+        }),
+      },
+    },
   },
 });
 

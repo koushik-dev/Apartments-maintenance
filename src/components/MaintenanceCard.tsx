@@ -1,4 +1,4 @@
-import { Box, Typography, Divider, Chip, Button } from "@mui/material";
+import { Box, Typography, Divider, Button, Fab } from "@mui/material";
 import React from "react";
 import { updateFlatDetails } from "../api";
 import { useAuth } from "../hooks/useAuth";
@@ -44,9 +44,23 @@ export const MaintenanceCard: React.FC<{
       gridTemplateColumns={"1fr 1fr"}
       gap={1}
     >
-      <Typography variant="h5">
-        {name} - {flat}
-      </Typography>
+      <Box>
+        <Fab
+          disabled
+          sx={{
+            "&.Mui-disabled": {
+              background: "#aed9f1",
+              color: "black",
+              fontSize: "1.3rem",
+              letterSpacing: "2px",
+            },
+          }}
+        >
+          {flat}
+        </Fab>
+      </Box>
+      <Typography></Typography>
+      <Typography variant="h6">{name}</Typography>
       <Typography align="right">
         <Button
           variant="contained"
@@ -56,22 +70,22 @@ export const MaintenanceCard: React.FC<{
           {status.charAt(0).toLocaleUpperCase() + status.slice(1)}
         </Button>
       </Typography>
-      <Typography>Water Usage Amount</Typography>
+      <Typography variant="body2">Water Usage Amount</Typography>
       <Typography align="right">{waterAmount}</Typography>
-      <Typography>Common Maintanence</Typography>
+      <Typography variant="body2">Common Maintanence</Typography>
       <Typography align="right">{commonAmount}</Typography>
-      <Typography>Overdue</Typography>
+      <Typography variant="body2">Overdue</Typography>
       <Typography align="right">{overdueAmount || 0}</Typography>
       <Divider />
       <Divider />
       <Typography variant="h6">
         Total
-        <Typography variant="subtitle2" fontWeight={400} display={"inline"}>
+        <Typography fontSize={12} fontWeight={400} display={"inline"}>
           (rounded)
         </Typography>
       </Typography>
       <Typography variant="h6" align="right">
-        {+total + (10 - (+total % 10))}
+        Rs. {+total + (10 - (+total % 10))}
       </Typography>
     </Box>
   );

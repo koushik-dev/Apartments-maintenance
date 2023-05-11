@@ -26,7 +26,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
     <Box display="flex" height="100%">
       <Header />
       <Sidebar />
-      <Stack flex={1} mt={8}>
+      <Stack flex={1} mt={8} overflow="scroll">
         <Box
           component="main"
           p={matches ? 3 : 1}

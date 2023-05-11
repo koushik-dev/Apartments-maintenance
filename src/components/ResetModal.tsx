@@ -49,11 +49,7 @@ export const ResetModal = () => {
           <Button variant="outlined" onClick={() => handleClose(false)}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleClose(true)}
-          >
+          <Button variant="contained" onClick={() => handleClose(true)}>
             Ok
           </Button>
         </DialogActions>

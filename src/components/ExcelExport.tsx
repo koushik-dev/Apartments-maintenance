@@ -1,7 +1,7 @@
+import { Download } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import React from "react";
 import { utils, writeFile } from "xlsx";
-import { FlatDetails } from "../model";
 import { useStore } from "../Providers";
 
 export const ExcelExport = () => {
@@ -150,5 +150,9 @@ export const ExcelExport = () => {
     utils.book_append_sheet(wb, ws3, "WaterReadings");
     writeFile(wb, "Sai Adharshya Flats_Maintenance.xlsx");
   };
-  return <Button onClick={() => exportFile()}>Download</Button>;
+  return (
+    <Button onClick={() => exportFile()}>
+      <Download /> Download Excel
+    </Button>
+  );
 };

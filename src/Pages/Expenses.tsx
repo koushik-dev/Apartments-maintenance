@@ -1,14 +1,37 @@
-import { Close } from "@mui/icons-material";
-import { Typography, Stack, Box, Divider, IconButton } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import {
+  Typography,
+  Stack,
+  Box,
+  Divider,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import React from "react";
 import { updateCommon } from "../api";
-import { ACTIONTYPES, CommonExpense } from "../model";
+import { AddExpenseModal, ResetModal } from "../components";
+import { useScreenSize } from "../hooks/useScreenSize";
+import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 export const Expenses = () => {
   const [{ commonDetails }, dispatch] = useStore();
+  const [open, setOpen] = React.useState(false);
+  const [action, setAction] = React.useState<{ type: string; payload?: any }>({
+    type: "",
+    payload: "",
+  });
 
-  const handleAdd = () => {};
+  const isMobile = useScreenSize() < 600;
+
+  const triggerAdd = () => {
+    setOpen(true);
+    setAction({ type: "Add" });
+  };
   const handleEdit = () => {};
   const deleteExpense = (expense: {
     expense: string;
@@ -33,44 +56,116 @@ export const Expenses = () => {
   };
 
   return (
-    <Stack flex={1} gap={2}>
-      {/* Expenses */}
-      <Typography variant="h5">Expenses</Typography>
-      <Box
-        sx={{
-          borderRadius: 2,
-          backgroundColor: "background.paper",
-        }}
-        p={1}
-      >
-        {commonDetails.expenses.map((exp, index) => (
-          <React.Fragment key={index}>
-            <Box display={"flex"} alignItems="center" p={1}>
-              <Typography variant="body1" flex={1}>
-                {exp.expense
-                  .split("_")
-                  .map((k) => k.charAt(0).toLocaleUpperCase() + k.slice(1))
-                  .join(" ")}
+    <>
+      {isMobile ? (
+        <Button
+          variant="contained"
+          onClick={triggerAdd}
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            left: 0,
+            borderRadius: 0,
+            height: 45,
+            zIndex: 1,
+          }}
+        >
+          Add Expense
+        </Button>
+      ) : null}
+      <Stack flex={1} gap={2}>
+        <Box display={"flex"} justifyContent={"right"} gap={2}>
+          {isMobile ? null : (
+            <Button variant="contained" onClick={triggerAdd}>
+              Add Expense
+            </Button>
+          )}
+          <ResetModal />
+        </Box>
+        {/* Expenses */}
+        <Typography variant="h5">Expenses</Typography>
+        <Box
+          sx={{
+            borderRadius: 2,
+            backgroundColor: "background.paper",
+          }}
+          p={1}
+        >
+          {commonDetails.expenses.map((exp, index) => (
+            <React.Fragment key={index}>
+              <Box display={"flex"} flexDirection={"column"} p={1}>
+                <Box display={"flex"} alignItems="center">
+                  <Typography variant="subtitle2" fontWeight={500} flex={1}>
+                    {exp.expense
+                      .split("_")
+                      .map((k) => k.charAt(0).toLocaleUpperCase() + k.slice(1))
+                      .join(" ")}
+                  </Typography>
+                  <Typography variant="overline" lineHeight={0}>
+                    Rs. {exp.amount}
+                  </Typography>
+                  <IconButton
+                    color="error"
+                    sx={{ border: "1px solid", ml: 2 }}
+                    onClick={() => {
+                      setOpen(true);
+                      setAction({ type: "Delete", payload: exp });
+                    }}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Box>
                 <Typography variant="body2" color="text.primary">
                   {exp.reason}
                 </Typography>
                 <Typography variant="body2" color="text.primary">
-                  {exp.date}
+                  {new Date(exp.date).toLocaleDateString()}
                 </Typography>
-              </Typography>
-              <Typography flex={1}>{exp.amount}</Typography>
-              <IconButton
-                color="error"
-                disabled
-                onClick={() => deleteExpense(exp)}
-              >
-                <Close />
-              </IconButton>
-            </Box>
-            <Divider />
-          </React.Fragment>
-        ))}
-      </Box>
-    </Stack>
+              </Box>
+              <Divider />
+            </React.Fragment>
+          ))}
+          <Box display={"flex"} alignItems="center" p={1}>
+            <Typography variant="h5" flex={1}>
+              Total
+            </Typography>
+            <Typography variant="body1">
+              Rs. {commonDetails.commonAmount + commonDetails.waterAmount}
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Expense Modal */}
+        <AddExpenseModal
+          {...{
+            open: open && action.type === "Add",
+            onClose: () => setOpen(false),
+          }}
+        />
+
+        {/* Confirm Modal */}
+        <Dialog
+          open={open && action.type !== "Add"}
+          fullWidth
+          onClose={() => setOpen(false)}
+        >
+          <DialogTitle>{action.type} Confirmation</DialogTitle>
+          <DialogContent dividers>
+            Are you sure you want to {action.type.toLocaleLowerCase()} the
+            expense?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button
+              variant="contained"
+              onClick={() => deleteExpense(action.payload)}
+            >
+              {action.type}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Stack>
+    </>
   );
 };

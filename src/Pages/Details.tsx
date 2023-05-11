@@ -1,4 +1,4 @@
-import { AddCircleOutlined } from "@mui/icons-material";
+import { AddCircleOutlined, ArrowBack } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,8 +8,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  List,
-  ListSubheader,
   Stack,
   TextField,
   Theme,
@@ -19,8 +17,8 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { updateCommon, updateReadings } from "../api";
-import { ResetModal } from "../components";
 import { getMonth, water_lines } from "../constants";
+import { useScreenSize } from "../hooks/useScreenSize";
 import { useWaterReadings } from "../hooks/useWaterReading";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
@@ -31,12 +29,15 @@ const Details = () => {
   const [state, dispatch] = useStore();
 
   const [open, setOpen] = React.useState(false);
+  const [confirmCalc, setConfirmCalc] = React.useState(false);
   const [activeLine, setActiveLine] = React.useState<Record<string, number>>(
     {}
   );
   const [waterLines, setWaterLines] = React.useState<Record<string, number>>(
     {}
   );
+
+  const isMobile = useScreenSize() < 600;
   const { calculate } = useWaterReadings(
     state.flatDetails.reduce(
       (acc, flat) => ({ ...acc, ...flat.water_reading.previous }),
@@ -86,86 +87,88 @@ const Details = () => {
 
   return (
     <>
-      <Stack flex={1} spacing={2}>
-        <List
-          sx={{
-            width: "100%",
-            height: "100%",
-            bgcolor: "background.paper",
-            borderRadius: 2,
-          }}
-          subheader={
-            <ListSubheader
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                p: 2,
-              }}
-            >
-              <Typography>Water Readings of {getMonth()}</Typography>
-              <Box display="flex" gap={2}>
-                <Button onClick={() => setWaterLines({})}>Clear Values</Button>
-                <ResetModal />
-                <Button
-                  variant="contained"
-                  onClick={handleCalculate}
-                  disabled={
-                    Object.values(waterLines).reduce(
-                      (a, v) => (v ? ++a : a),
-                      0
-                    ) !== 20
-                  }
-                >
-                  Calculate
-                </Button>
-              </Box>
-            </ListSubheader>
-          }
+      <Stack
+        flex={1}
+        spacing={2}
+        p={2}
+        sx={{ backgroundColor: "background.paper", borderRadius: 1 }}
+      >
+        <Box>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack /> Maintenance
+          </Button>
+        </Box>
+        <Stack
+          direction={"row"}
+          alignItems="center"
+          justifyContent={"space-between"}
         >
-          <Box
-            display="grid"
-            gridTemplateColumns="repeat(4, 1fr)"
-            gap={1}
-            p={2}
-            pt={0}
-          >
-            {water_lines.map((line) => (
-              <React.Fragment key={line}>
-                <Card
+          <Typography>Water Readings of {getMonth()}</Typography>
+          <Box display="flex" gap={2}>
+            <Button variant="outlined" onClick={() => setWaterLines({})}>
+              Clear Readings
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => setConfirmCalc(true)}
+              disabled={
+                Object.values(waterLines).reduce((a, v) => (v ? ++a : a), 0) !==
+                20
+              }
+              sx={
+                isMobile
+                  ? {
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      width: "100%",
+                      borderRadius: 0,
+                      height: 45,
+                      zIndex: 1,
+                    }
+                  : {}
+              }
+            >
+              Calculate
+            </Button>
+          </Box>
+        </Stack>
+        <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={1}>
+          {water_lines.map((line) => (
+            <React.Fragment key={line}>
+              <Card
+                sx={{
+                  backgroundColor: !!waterLines[line] ? "#8757d130" : "white",
+                }}
+              >
+                <CardActionArea
                   sx={{
-                    backgroundColor: !!waterLines[line] ? "#8757d130" : "white",
+                    p: 2,
+                  }}
+                  onClick={() => {
+                    setActiveLine({ [line]: 0 });
+                    setOpen(true);
                   }}
                 >
-                  <CardActionArea
-                    sx={{
-                      p: 2,
-                    }}
-                    onClick={() => {
-                      setActiveLine({ [line]: 0 });
-                      setOpen(true);
-                    }}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
                   >
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Stack>
-                        <Typography variant="h6">{line}</Typography>
-                        <Typography variant="body2">
-                          {waterLines[line] || "-"}
-                        </Typography>
-                      </Stack>
-                      {matches ? <AddCircleOutlined /> : null}
+                    <Stack>
+                      <Typography variant="h6">{line}</Typography>
+                      <Typography variant="body2">
+                        {waterLines[line] || "-"}
+                      </Typography>
                     </Stack>
-                  </CardActionArea>
-                </Card>
-                {line.includes("C") && !line.includes("1") ? <Box></Box> : null}
-              </React.Fragment>
-            ))}
-          </Box>
-        </List>
+                    {matches ? <AddCircleOutlined /> : null}
+                  </Stack>
+                </CardActionArea>
+              </Card>
+              {line.includes("C") && !line.includes("1") ? <Box></Box> : null}
+            </React.Fragment>
+          ))}
+        </Box>
       </Stack>
 
       {/* Reading Modal */}
@@ -191,6 +194,24 @@ const Details = () => {
           </Button>
           <Button variant="contained" onClick={() => handleClose(true)}>
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Calculate Modal */}
+      <Dialog open={confirmCalc} onClose={() => setConfirmCalc(false)}>
+        <DialogTitle>Calculation Confirmation</DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body1">
+            Before calculating, make sure you added all the common expenses.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={() => setConfirmCalc(false)}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleCalculate}>
+            Ok
           </Button>
         </DialogActions>
       </Dialog>

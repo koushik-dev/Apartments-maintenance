@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -18,6 +19,7 @@ import { Navigate } from "react-router-dom";
 
 export const Login = () => {
   const [err, setErr] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const { login, user } = useAuth();
   const {
     control,
@@ -28,10 +30,12 @@ export const Login = () => {
   const hasError = (id: string) => Object.keys(errors).includes(id);
 
   const onSubmit = (formValues: Partial<User>) => {
+    setLoading(true);
     authenticateUser(formValues).then((data) => {
       if (typeof data === "object") {
         login(data);
       } else setErr(data);
+      setLoading(false);
     });
   };
 
@@ -84,8 +88,8 @@ export const Login = () => {
             label={`Secret`}
             {...register("secret", { required: true })}
           />
-          <Button type="submit" variant="contained">
-            Login
+          <Button type="submit" variant="contained" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
         </Stack>
       </form>

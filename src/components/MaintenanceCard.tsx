@@ -1,6 +1,8 @@
+import { Wallet } from "@mui/icons-material";
 import { Box, Typography, Divider, Button, Fab } from "@mui/material";
 import React from "react";
 import { updateFlatDetails } from "../api";
+import { getMonth } from "../constants";
 import { useAuth } from "../hooks/useAuth";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
@@ -14,7 +16,7 @@ export const MaintenanceCard: React.FC<{
   status: string;
 }> = ({ name, flat, waterAmount, commonAmount, overdueAmount, status }) => {
   const [total, setTotal] = React.useState(0);
-  const [, dispatch] = useStore();
+  const [state, dispatch] = useStore();
   const { user } = useAuth();
 
   const updateDetails = () => {
@@ -60,23 +62,38 @@ export const MaintenanceCard: React.FC<{
         </Fab>
       </Box>
       <Box alignSelf={"center"} textAlign="right">
-        <Button
-          variant="contained"
-          color={status === "pending" ? "error" : "success"}
-          onClick={user.isAdmin ? updateDetails : () => {}}
-        >
-          {status.charAt(0).toLocaleUpperCase() + status.slice(1)}
-        </Button>
+        {user.isAdmin ? (
+          <Button
+            variant="contained"
+            color={
+              status.toLocaleLowerCase() === "pending" ? "error" : "success"
+            }
+            onClick={updateDetails}
+          >
+            {status.charAt(0).toLocaleUpperCase() + status.slice(1)}
+          </Button>
+        ) : (
+          <a
+            href={`upi://pay?pa=vijay.pragalath@okhdfcbank&pn=VIJAYAKUMAR MARKANDEYAN&am=${
+              +total + (10 - (+total % 10))
+            } &cu=INR&tn=Maintenance bill for ${getMonth(
+              state.commonDetails.expenses[0].date
+            )} month`}
+            style={{ pointerEvents: flat !== user.flat ? "none" : "auto" }}
+          >
+            <Button
+              variant="contained"
+              color="success"
+              disabled={flat !== user.flat}
+            >
+              <Wallet />
+              &nbsp; Pay
+            </Button>
+          </a>
+        )}
       </Box>
       <Typography variant="h6">{name}</Typography>
-      <Typography>
-        <a
-          href="upi://pay?pa=UPIID@oksbi&amp;pn=JOHN BRITAS AK &amp;cu=INR"
-          className="upi-pay1"
-        >
-          Pay Now !
-        </a>
-      </Typography>
+      <Typography></Typography>
       <Typography variant="body2">Water Usage Amount</Typography>
       <Typography align="right">{waterAmount}</Typography>
       <Typography variant="body2">Common Maintanence</Typography>

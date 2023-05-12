@@ -183,7 +183,7 @@ const Details = () => {
             label="Enter Reading"
             onChange={({ target: { value } }) =>
               setActiveLine((line) => ({
-                [Object.keys(line)[0]]: +value,
+                [Object.keys(line)[0]]: +value * 100,
               }))
             }
           />

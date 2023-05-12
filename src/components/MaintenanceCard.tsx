@@ -59,9 +59,7 @@ export const MaintenanceCard: React.FC<{
           {flat}
         </Fab>
       </Box>
-      <Typography></Typography>
-      <Typography variant="h6">{name}</Typography>
-      <Typography align="right">
+      <Box alignSelf={"center"} textAlign="right">
         <Button
           variant="contained"
           color={status === "pending" ? "error" : "success"}
@@ -69,6 +67,15 @@ export const MaintenanceCard: React.FC<{
         >
           {status.charAt(0).toLocaleUpperCase() + status.slice(1)}
         </Button>
+      </Box>
+      <Typography variant="h6">{name}</Typography>
+      <Typography>
+        <a
+          href="upi://pay?pa=UPIID@oksbi&amp;pn=JOHN BRITAS AK &amp;cu=INR"
+          className="upi-pay1"
+        >
+          Pay Now !
+        </a>
       </Typography>
       <Typography variant="body2">Water Usage Amount</Typography>
       <Typography align="right">{waterAmount}</Typography>

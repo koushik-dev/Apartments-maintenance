@@ -1,10 +1,8 @@
 import { Add } from "@mui/icons-material";
 import {
   Button,
-  Checkbox,
   Divider,
   FormControl,
-  FormControlLabel,
   Grid,
   IconButton,
   InputLabel,
@@ -39,13 +37,6 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const details: Partial<FlatDetails> = {
       ...values,
       tenant: [firstname, lastname].join(" "),
-      // ...(values.isOwner ? { owner: [firstname, lastname].join(" ") } : {}),
-      // ...(values.isOwner
-      //   ? { owner_contact_number: values.contact_number }
-      //   : {}),
-      water_reading: { previous: {}, current: {} },
-      payment_status: "Pending",
-      overdue_amount: 0,
     };
     addFlatDetails(details).then((data) => {
       dispatch({ type: ACTIONTYPES.FLATDETAILS, payload: data });

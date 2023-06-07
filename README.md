@@ -3,3 +3,4 @@
 An application to maintain apartments expenses and flats monthly maintenance amount.
 
 Library: React.JS
+Database: MongoDB

@@ -15,7 +15,7 @@ export const Home = () => {
     ?.payment_status;
 
   React.useEffect(() => {
-    console.log(process.env.REACT_APP_ADMIN_PASSWORD);
+    console.log(import.meta.env.REACT_APP_ADMIN_PASSWORD);
   }, []);
 
   return (

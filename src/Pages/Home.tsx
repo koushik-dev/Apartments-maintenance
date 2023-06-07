@@ -5,6 +5,7 @@ import { useStore } from "../Providers";
 import { collection, serverTimestamp, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getMonth } from "../constants";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const [{ flatDetails, commonDetails }] = useStore();
@@ -13,12 +14,9 @@ export const Home = () => {
   const payment_status = flatDetails.filter((f) => f.flat === user.flat)?.[0]
     ?.payment_status;
 
-  const postMsg = async () => {
-    addDoc(collection(db, "notifications"), {
-      message: "added maintanence",
-      timeStamp: serverTimestamp(),
-    }).then((v) => console.log("Notification added."));
-  };
+  React.useEffect(() => {
+    console.log(process.env.ADMIN);
+  }, []);
 
   return (
     <Stack flex={1} direction="column" gap={2}>
@@ -28,52 +26,27 @@ export const Home = () => {
         flexWrap={"wrap"}
         gap={2}
       >
-        <Typography variant="h5">Dashboard</Typography>
         <Stack direction="row" gap={2}></Stack>
       </Box>
-      <Grid
-        container
-        sx={{ background: "#ffffff50", height: "100%" }}
+      <Stack
+        flex={1}
+        sx={{ background: "#ffffff" }}
         p={2}
         gap={2}
         borderRadius={2}
       >
-        <Grid item>
-          <Card sx={{ p: 2 }} raised>
-            <Typography variant="body1">
-              {getMonth(commonDetails.expenses[0].date)} month Maintenance
-              Payment Status
-            </Typography>
-            <hr />
-            <Typography
-              variant="body1"
-              sx={{
-                color: (theme) =>
-                  payment_status === "paid"
-                    ? theme.palette.success.main
-                    : theme.palette.error.main,
-              }}
-            >
-              {payment_status}
-            </Typography>
-          </Card>
-        </Grid>
-        <Grid item>
-          <Card sx={{ p: 2 }} raised>
-            <Typography variant="body1">Notifications</Typography>
-            <hr />
-            <Typography variant="body2">
-              - Initiated Metro Water connection process
-            </Typography>
-            <Typography variant="body2">
-              - Initiated Sewage connection process
-            </Typography>
-            <Typography variant="body2">
-              - Initiated CCTV connection process
-            </Typography>
-          </Card>
-        </Grid>
-      </Grid>
+        <Typography variant="h4" alignSelf={"center"} mt={3}>
+          Welcome {flatDetails.find((v) => v.flat === user.flat)?.tenant}!
+        </Typography>
+        <Box display={"flex"} gap={2} alignSelf={"center"}>
+          <Link to="/apartments/maintenance">
+            <Button variant="outlined">Check my Maintenance Bill</Button>
+          </Link>
+          <Link to="/apartments/people">
+            <Button variant="outlined">Show Apartments Residents</Button>
+          </Link>
+        </Box>
+      </Stack>
     </Stack>
   );
 };

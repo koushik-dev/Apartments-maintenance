@@ -58,15 +58,18 @@ const Details = () => {
     Object.entries(waterLines).map(([key, value]) => {
       readings[key.slice(0, 2)][key] = value;
     });
-    updateReadings(readings).then((data) =>
-      dispatch({ type: ACTIONTYPES.FLATDETAILS, payload: data })
-    );
-    let details = calculate();
-    updateCommon({ ...state.commonDetails, ...details })
+    updateReadings(readings)
       .then((data) =>
-        dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
+        dispatch({ type: ACTIONTYPES.FLATDETAILS, payload: data })
       )
-      .then((_) => navigate("/apartments/maintenance"));
+      .then((_) => {
+        let details = calculate();
+        updateCommon({ ...state.commonDetails, ...details })
+          .then((data) =>
+            dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
+          )
+          .then((_) => navigate("/apartments/maintenance"));
+      });
   };
 
   const handleClose = (isAdd: boolean) => {

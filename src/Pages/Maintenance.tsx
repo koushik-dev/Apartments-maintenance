@@ -3,12 +3,14 @@ import { Box, Fab, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import { ExcelExport, MaintenanceCard } from "../components";
 import { getMonth } from "../constants";
+import { useAuth } from "../hooks/useAuth";
 import { useScreenSize } from "../hooks/useScreenSize";
 import { useStore } from "../Providers";
 
 export const Maintenance = () => {
   const [state] = useStore();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const isMobile = useScreenSize() < 600;
 
   return (
@@ -24,24 +26,26 @@ export const Maintenance = () => {
         </Typography>
         <Box>
           <ExcelExport />
-          <Fab
-            aria-label="add"
-            color="primary"
-            variant={isMobile ? "circular" : "extended"}
-            sx={
-              isMobile
-                ? {
-                    position: "absolute",
-                    bottom: 24,
-                    right: 24,
-                    backgroundColor: "#8757d1",
-                  }
-                : { backgroundColor: "#8757d1" }
-            }
-            onClick={() => navigate("/apartments/details")}
-          >
-            <Add /> {isMobile ? "" : "Add Readings"}
-          </Fab>
+          {user?.isAdmin ? (
+            <Fab
+              aria-label="add"
+              color="primary"
+              variant={isMobile ? "circular" : "extended"}
+              sx={
+                isMobile
+                  ? {
+                      position: "absolute",
+                      bottom: 24,
+                      right: 24,
+                      backgroundColor: "#8757d1",
+                    }
+                  : { backgroundColor: "#8757d1" }
+              }
+              onClick={() => navigate("/apartments/details")}
+            >
+              <Add /> {isMobile ? "" : "Add Readings"}
+            </Fab>
+          ) : null}
         </Box>
       </Stack>
       <Stack

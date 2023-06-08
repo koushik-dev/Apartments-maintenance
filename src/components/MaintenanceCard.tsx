@@ -1,8 +1,9 @@
 import { Wallet } from "@mui/icons-material";
 import { Box, Typography, Divider, Button, Fab } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { updateFlatDetails } from "../api";
-import { getMonth } from "../constants";
+import { getMonth, UPI_URL } from "../constants";
 import { useAuth } from "../hooks/useAuth";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
@@ -18,6 +19,7 @@ export const MaintenanceCard: React.FC<{
   const [total, setTotal] = React.useState(0);
   const [state, dispatch] = useStore();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const updateDetails = () => {
     const data = {
@@ -37,14 +39,24 @@ export const MaintenanceCard: React.FC<{
     <Box
       sx={{
         backgroundColor: "whitesmoke",
-        border: "1px solid transparent",
+        border: (theme) =>
+          user?.flat === flat
+            ? `3px solid ${theme.palette.primary.main}`
+            : "1px solid transparent",
         borderRadius: "0.5rem",
         boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px",
+        "&:hover": {
+          cursor: "pointer",
+        },
+        "&:active": {
+          boxShadow: "inset rgba(0, 0, 0, 0.1) 2px 2px 10px 0px",
+        },
       }}
       p={2.5}
       display="grid"
       gridTemplateColumns={"2fr 1fr"}
       gap={1}
+      onClick={() => navigate(`/apartments/splitup/${flat}`)}
     >
       <Box>
         <Fab
@@ -74,11 +86,14 @@ export const MaintenanceCard: React.FC<{
           </Button>
         ) : (
           <a
-            href={`upi://pay?pa=vijay.pragalath@okhdfcbank&pn=VIJAYAKUMAR MARKANDEYAN&am=${
-              +total + (10 - (+total % 10))
-            }&cu=INR&tn=Maintenance bill for ${getMonth(
-              state.commonDetails.expenses[0].date
-            )} month`}
+            href={
+              UPI_URL +
+              `${
+                +total + (10 - (+total % 10))
+              }&cu=INR&tn=Maintenance bill for ${getMonth(
+                state.commonDetails.expenses[0].date
+              )} month`
+            }
             style={{
               pointerEvents: flat !== user.flat ? "none" : "auto",
               textDecoration: "none",
@@ -88,6 +103,7 @@ export const MaintenanceCard: React.FC<{
               variant="contained"
               color="success"
               disabled={flat !== user.flat}
+              sx={{ px: 1.5 }}
             >
               <Wallet />
               &nbsp; Pay

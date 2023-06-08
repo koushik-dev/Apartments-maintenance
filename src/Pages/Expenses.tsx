@@ -15,12 +15,14 @@ import React from "react";
 import { updateCommon } from "../api";
 import { AddExpenseModal, ResetModal } from "../components";
 import { getMonth } from "../constants";
+import { useAuth } from "../hooks/useAuth";
 import { useScreenSize } from "../hooks/useScreenSize";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 export const Expenses = () => {
   const [{ commonDetails }, dispatch] = useStore();
+  const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [action, setAction] = React.useState<{ type: string; payload?: any }>({
     type: "",
@@ -58,7 +60,7 @@ export const Expenses = () => {
 
   return (
     <>
-      {isMobile ? (
+      {isMobile && user?.isAdmin ? (
         <Button
           variant="contained"
           onClick={triggerAdd}
@@ -86,7 +88,7 @@ export const Expenses = () => {
             Expenses for {getMonth(commonDetails.expenses[0].date)} month
           </Typography>
           <Box display={"flex"} justifyContent={"right"} gap={2}>
-            {isMobile ? null : (
+            {isMobile || !user?.isAdmin ? null : (
               <Button variant="contained" onClick={triggerAdd}>
                 Add Expense
               </Button>
@@ -114,16 +116,18 @@ export const Expenses = () => {
                   <Typography variant="overline" lineHeight={0}>
                     Rs. {exp.amount}
                   </Typography>
-                  <IconButton
-                    color="error"
-                    sx={{ border: "1px solid", ml: 2 }}
-                    onClick={() => {
-                      setOpen(true);
-                      setAction({ type: "Delete", payload: exp });
-                    }}
-                  >
-                    <Delete />
-                  </IconButton>
+                  {user?.isAdmin ? (
+                    <IconButton
+                      color="error"
+                      sx={{ border: "1px solid", ml: 2 }}
+                      onClick={() => {
+                        setOpen(true);
+                        setAction({ type: "Delete", payload: exp });
+                      }}
+                    >
+                      <Delete />
+                    </IconButton>
+                  ) : null}
                 </Box>
                 <Typography variant="body2" color="text.primary">
                   {exp.reason}

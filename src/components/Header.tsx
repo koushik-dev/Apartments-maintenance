@@ -10,7 +10,12 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { Logout, Menu as MenuIcon, Person } from "@mui/icons-material";
+import {
+  Logout,
+  Menu as MenuIcon,
+  Person,
+  AdminPanelSettings,
+} from "@mui/icons-material";
 import React from "react";
 import { useStore } from "../Providers";
 import { ACTIONTYPES } from "../model";
@@ -60,14 +65,14 @@ export const Header = () => {
           <Box display="flex" alignItems="center">
             {matches ? (
               <Typography variant="body2">
-                {
-                  flatDetails.filter((flat) => flat.flat === user.flat)[0]
-                    ?.tenant
-                }
+                {user?.isAdmin
+                  ? "Admin"
+                  : flatDetails.filter((flat) => flat.flat === user.flat)[0]
+                      ?.tenant}
               </Typography>
             ) : null}
             <IconButton sx={{ color: "white" }} onClick={handleClick}>
-              <Person />
+              {user?.isAdmin ? <AdminPanelSettings /> : <Person />}
             </IconButton>
           </Box>
         </Toolbar>

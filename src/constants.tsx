@@ -1,75 +1,8 @@
 import { Chip } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React from "react";
-import { AmountInfo } from "./components";
 import { MaintenanceActions } from "./components/MaintenanceActions";
 
-const PeopleCols: GridColDef[] = [
-  {
-    field: "tenant",
-    headerName: "Resident",
-    width: 160,
-  },
-  {
-    field: "flat",
-    headerName: "Flat",
-    width: 160,
-  },
-  {
-    field: "contact_number",
-    headerName: "Contact Number",
-    width: 200,
-  },
-  {
-    field: "owner",
-    headerName: "Owner",
-    width: 160,
-  },
-  {
-    field: "lastUpdated",
-    headerName: "Last Updated",
-    width: 160,
-    renderCell: (params) => <>{new Date(params.value).toDateString()}</>,
-  },
-];
-const MaintenanceCols: GridColDef[] = [
-  {
-    field: "tenant",
-    headerName: "Resident",
-    width: 160,
-  },
-  {
-    field: "flat",
-    headerName: "Flat",
-    width: 75,
-  },
-  {
-    field: "lastUpdated",
-    headerName: "Last Updated",
-    width: 160,
-    renderCell: (params) => <>{new Date(params.value).toDateString()}</>,
-  },
-  {
-    field: "totalAmount",
-    headerName: "Total Amount",
-    width: 200,
-    renderCell: (params) => <AmountInfo {...{ params }} />,
-  },
-  {
-    field: "payment_status",
-    headerName: "Payment Status",
-    width: 160,
-    renderCell: ({ value }) => (
-      <Chip label={value} color={value === "pending" ? "error" : "success"} />
-    ),
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    minWidth: 320,
-    renderCell: (params) => <MaintenanceActions {...{ params }} />,
-  },
-];
 export const water_lines = [
   "F1A",
   "F1B",
@@ -110,7 +43,6 @@ export const getFlatTotalAmount = (
   return +total + (10 - (+total % 10));
 };
 
-export { PeopleCols, MaintenanceCols };
 export const UPI_URL =
   "upi://pay?pa=vijay.pragalath@okhdfcbank&pn=VIJAYAKUMAR MARKANDEYAN&am=";
 

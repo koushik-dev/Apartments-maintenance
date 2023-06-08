@@ -13,18 +13,16 @@ import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
 
 export const ResetModal = () => {
-  const [, dispatch] = useStore();
+  const [state, dispatch] = useStore();
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
   const handleClose = (isAdd: boolean) => {
     if (isAdd) {
       updateCommon({
+        ...state.commonDetails,
         expenses: [],
         commonAmount: 0,
         waterAmount: 0,
-        total_water_usage: 0,
-        individual_water_usage: {},
-        individual_water_percentages: {},
       }).then((data) =>
         dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
       );

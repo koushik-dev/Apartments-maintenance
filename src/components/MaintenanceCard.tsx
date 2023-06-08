@@ -86,18 +86,16 @@ export const MaintenanceCard: React.FC<{
           </Button>
         ) : (
           <a
-            href={
-              UPI_URL +
-              `${
-                +total + (10 - (+total % 10))
-              }&cu=INR&tn=Maintenance bill for ${getMonth(
-                state.commonDetails.expenses[0].date
-              )} month`
-            }
+            href={`upi://pay?pa=vijay.pragalath@okhdfcbank&pn=VIJAYAKUMAR MARKANDEYAN&am=${
+              +total + (10 - (+total % 10))
+            }&cu=INR&tn=Maintenance bill for ${getMonth(
+              state.commonDetails.expenses[0].date
+            )} month`}
             style={{
               pointerEvents: flat !== user.flat ? "none" : "auto",
               textDecoration: "none",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <Button
               variant="contained"

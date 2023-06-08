@@ -53,9 +53,10 @@ export const Expenses = () => {
           return false;
         return true;
       }),
-    }).then((data) =>
-      dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
-    );
+    }).then((data) => {
+      dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] });
+      setOpen(false);
+    });
   };
 
   return (
@@ -85,7 +86,7 @@ export const Expenses = () => {
         >
           {/* Expenses */}
           <Typography variant="h5">
-            Expenses for {getMonth(commonDetails.expenses[0].date)} month
+            Expenses for {getMonth(commonDetails.expenses?.[0]?.date)} month
           </Typography>
           <Box display={"flex"} justifyContent={"right"} gap={2}>
             {isMobile || !user?.isAdmin ? null : (
@@ -171,6 +172,7 @@ export const Expenses = () => {
           <DialogActions>
             <Button onClick={() => setOpen(false)}>Cancel</Button>
             <Button
+              type="submit"
               variant="contained"
               onClick={() => deleteExpense(action.payload)}
             >

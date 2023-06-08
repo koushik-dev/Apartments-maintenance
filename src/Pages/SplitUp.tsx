@@ -1,5 +1,7 @@
-import { Info } from "@mui/icons-material";
+import { ArrowBack, Info } from "@mui/icons-material";
 import {
+  Box,
+  Button,
   IconButton,
   List,
   ListItem,
@@ -9,11 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getFlatTotalAmount } from "../constants";
 import { useStore } from "../Providers";
 
 export const SplitUp = () => {
+  const navigate = useNavigate();
   const [flat, setFlat] = React.useState<Record<string, any>>({
     water_loads: 0,
     water_load_cost: 0,
@@ -121,7 +124,7 @@ export const SplitUp = () => {
     }, []),
 
     {
-      description: `Total cost for ${id}`,
+      description: `Total cost for ${id} (rounded)`,
       quantity: "",
       price: (
         getFlatTotalAmount(
@@ -153,9 +156,14 @@ export const SplitUp = () => {
   }, [commonDetails]);
   return (
     <Stack flex={1} gap={2}>
-      <Typography variant="h5">
-        Maintenance split up for flat: <b>{id}</b>
-      </Typography>
+      <Box display={"flex"} alignItems="center">
+        <IconButton onClick={() => navigate(-1)}>
+          <ArrowBack />
+        </IconButton>
+        <Typography variant="h5">
+          Bill Splitup For Flat: <b>{id}</b>
+        </Typography>
+      </Box>
       <List sx={{ bgcolor: "background.paper", borderRadius: 2 }}>
         {expenseDetails.map((exp, index) => (
           <ListItem key={exp.description + index} sx={{ py: 0 }}>

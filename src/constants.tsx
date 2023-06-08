@@ -111,3 +111,7 @@ export const getFlatTotalAmount = (
 };
 
 export { PeopleCols, MaintenanceCols };
+export const UPI_URL =
+  "upi://pay?pa=vijay.pragalath@okhdfcbank&pn=VIJAYAKUMAR MARKANDEYAN&am=";
+
+export const REACT_APP_ADMIN_PASSWORD = "Admin@123";

@@ -22,7 +22,7 @@ export const Maintenance = () => {
         gap={2}
       >
         <Typography variant="h5">
-          Maintenance For {getMonth(state.commonDetails.expenses[0].date)}
+          Maintenance For {getMonth(state.commonDetails?.expenses?.[0]?.date)}
         </Typography>
         <Box>
           <ExcelExport />

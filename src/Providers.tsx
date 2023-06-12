@@ -49,23 +49,6 @@ const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
         commonDetails: {
           ...state.commonDetails,
           ...action.payload,
-          ...action.payload.expenses.reduce(
-            (
-              acc: { commonAmount: number; waterAmount: number },
-              value: { expense: string; amount: number }
-            ) => {
-              if (value.expense === "water_load_purchased")
-                return {
-                  ...acc,
-                  waterAmount: acc.waterAmount + value.amount,
-                };
-              return {
-                ...acc,
-                commonAmount: acc.commonAmount + value.amount,
-              };
-            },
-            { commonAmount: 0, waterAmount: 0 }
-          ),
         },
       };
     default:

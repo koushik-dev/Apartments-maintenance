@@ -42,6 +42,11 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           updatedOn: new Date().toISOString(),
         },
       ],
+      ...(formValues.expense === "water_load_purchased"
+        ? { waterAmount: state.commonDetails.waterAmount + +formValues.amount }
+        : {
+            commonAmount: state.commonDetails.commonAmount + +formValues.amount,
+          }),
     }).then((data) =>
       dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
     );

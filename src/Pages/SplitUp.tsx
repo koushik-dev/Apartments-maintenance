@@ -1,7 +1,8 @@
-import { ArrowBack, Info } from "@mui/icons-material";
+import { ArrowBack, Info, Wallet } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   List,
   ListItem,
@@ -12,11 +13,19 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { getFlatTotalAmount } from "../constants";
+import { getFlatTotalAmount, getMonth, UPI_URL } from "../constants";
+import { useAuth } from "../hooks/useAuth";
+import { useScreenSize } from "../hooks/useScreenSize";
 import { useStore } from "../Providers";
 
 export const SplitUp = () => {
+  const [amount, setAmount] = React.useState<{
+    waterAmount: number;
+    commonAmount: number;
+  }>({ waterAmount: 0, commonAmount: 0 });
   const navigate = useNavigate();
+  const isMobile450 = useScreenSize() < 450;
+  const isMobile1080 = useScreenSize() < 1080;
   const [flat, setFlat] = React.useState<Record<string, any>>({
     water_loads: 0,
     water_load_cost: 0,
@@ -25,6 +34,7 @@ export const SplitUp = () => {
     details: {},
   });
   const [{ flatDetails, commonDetails }] = useStore();
+  const { user } = useAuth();
   const { id = "" } = useParams();
   const expenseDetails = [
     {
@@ -106,8 +116,13 @@ export const SplitUp = () => {
     },
     {
       description: `Total sewage cost`,
+      quantity: flat?.sewage_loads * flat?.sewage_cost || 0,
+      price: "",
+    },
+    {
+      description: `${id} - Sewage cost`,
       quantity: "",
-      price: flat?.sewage_loads * flat?.sewage_cost || 0,
+      price: ((flat?.sewage_loads * flat?.sewage_cost || 0) / 6).toFixed(1),
     },
     ...commonDetails.expenses.reduce((acc: any[], details) => {
       if (
@@ -153,29 +168,139 @@ export const SplitUp = () => {
         details: flatDetails.filter((v) => v.flat === id)[0],
       });
     }
+
+    setAmount({
+      waterAmount: Math.round(
+        commonDetails.waterAmount *
+          ((commonDetails.individual_water_percentages[id] || 0) / 100)
+      ),
+      commonAmount: +(commonDetails.commonAmount / 6).toFixed(0),
+    });
   }, [commonDetails]);
   return (
     <Stack flex={1} gap={2}>
       <Box display={"flex"} alignItems="center">
-        <IconButton onClick={() => navigate(-1)}>
-          <ArrowBack />
-        </IconButton>
-        <Typography variant="h5">
-          Bill Splitup For Flat: <b>{id}</b>
-        </Typography>
+        <Button onClick={() => navigate(-1)}>
+          <ArrowBack /> Go Back
+        </Button>
       </Box>
-      <List sx={{ bgcolor: "background.paper", borderRadius: 2 }}>
-        {expenseDetails.map((exp, index) => (
-          <ListItem key={exp.description + index} sx={{ py: 0 }}>
-            <ListItemText primary={exp.description} secondary={exp.quantity} />
-            {exp.component}
-            <ListItemText
-              primaryTypographyProps={{ textAlign: "right", fontWeight: "700" }}
-              primary={exp.price}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <Stack
+        sx={{
+          bgcolor: "background.paper",
+          borderRadius: 2,
+          px: isMobile1080 ? 3 : 24,
+          py: 3,
+        }}
+      >
+        {/* Receipt Block */}
+        <Box
+          display={"flex"}
+          gap={3}
+          sx={{
+            backgroundImage:
+              "linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%)",
+            borderRadius: 8,
+            p: 4,
+          }}
+        >
+          <Box flex={1}>
+            <Typography variant="body2" color={"#41596d"}>
+              Receipt summary:
+            </Typography>
+            <Typography variant="h4" fontWeight={600}>
+              Maintenance Bill
+            </Typography>
+            <Typography variant="caption" color={"#41596d"}>
+              for the month {getMonth(commonDetails?.expenses?.[0]?.date)}
+            </Typography>
+            <Stack
+              display={"grid"}
+              gridTemplateColumns="2fr 1fr"
+              rowGap={1}
+              alignItems="center"
+              pt={2}
+            >
+              <Typography color={"#40596d"} variant="body2">
+                Water Usage Amount
+              </Typography>
+              <Typography color={"#40596d"} align="right">
+                {amount.waterAmount}
+              </Typography>
+              <Divider />
+              <Divider />
+              <Typography color={"#40596d"} variant="body2">
+                Common Maintanence
+              </Typography>
+              <Typography color={"#40596d"} align="right">
+                {amount.commonAmount}
+              </Typography>
+              <Divider />
+              <Divider />
+              <Typography variant="h3" fontWeight={"700"}>
+                ₹{" "}
+                {amount.waterAmount +
+                  amount.commonAmount +
+                  (10 - ((amount.waterAmount + amount.commonAmount) % 10))}
+              </Typography>
+              <Typography color={"#40596d"} variant="h6" align="right">
+                Total
+              </Typography>
+
+              {/* Pay Button */}
+              <a
+                href={
+                  UPI_URL +
+                  `${
+                    amount.waterAmount +
+                    amount.commonAmount +
+                    (10 - ((amount.waterAmount + amount.commonAmount) % 10))
+                  }&cu=INR&tn=Maintenance bill for ${getMonth(
+                    commonDetails?.expenses[0]?.date
+                  )} month`
+                }
+                style={{
+                  pointerEvents: id !== user.flat ? "none" : "auto",
+                  textDecoration: "none",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Button variant="contained" disabled={id !== user.flat}>
+                  <Wallet />
+                  &nbsp; Pay
+                </Button>
+              </a>
+            </Stack>
+          </Box>
+          {isMobile450 ? null : (
+            <Box sx={{ flex: "0.5", alignSelf: "center" }}>
+              <img
+                src="/receipt.svg"
+                alt="image"
+                width="100%"
+                height={"auto"}
+              />
+            </Box>
+          )}
+        </Box>
+        <List>
+          {expenseDetails.map((exp, index) => (
+            <ListItem key={exp.description + index} sx={{ py: 0 }}>
+              <ListItemText
+                primary={exp.description}
+                secondary={exp.quantity}
+              />
+              {exp.component}
+              <ListItemText
+                primaryTypographyProps={{
+                  textAlign: "right",
+                  fontWeight: expenseDetails.length - 1 === index ? 700 : 400,
+                }}
+                primary={exp.price}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Stack>
     </Stack>
   );
 };

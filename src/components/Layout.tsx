@@ -33,7 +33,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
           sx={{
             flexGrow: 1,
             display: "flex",
-            backgroundColor: "#e3e3e3",
+            backgroundColor: "#f5f7fa",
           }}
         >
           {children}

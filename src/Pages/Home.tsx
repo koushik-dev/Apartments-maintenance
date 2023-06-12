@@ -24,7 +24,7 @@ export const Home = () => {
         gap={2}
         borderRadius={2}
       >
-        <Typography variant="h4" alignSelf={"center"} mt={3}>
+        <Typography variant="h4" alignSelf={"center"} mt={3} textAlign="center">
           Welcome{" "}
           {user?.isAdmin
             ? "Admin"

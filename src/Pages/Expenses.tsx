@@ -53,6 +53,11 @@ export const Expenses = () => {
           return false;
         return true;
       }),
+      ...(expense.expense === "water_load_purchased"
+        ? { waterAmount: commonDetails.waterAmount - expense.amount }
+        : {
+            commonAmount: commonDetails.commonAmount - expense.amount,
+          }),
     }).then((data) => {
       dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] });
       setOpen(false);
@@ -114,7 +119,7 @@ export const Expenses = () => {
                       .map((k) => k.charAt(0).toLocaleUpperCase() + k.slice(1))
                       .join(" ")}
                   </Typography>
-                  <Typography variant="overline" lineHeight={0}>
+                  <Typography variant="body2" lineHeight={0}>
                     Rs. {exp.amount}
                   </Typography>
                   {user?.isAdmin ? (

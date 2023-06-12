@@ -9,7 +9,7 @@ export const Modal: React.FC<DialogProps & { onClose: () => void }> = ({
 }) => {
   return (
     <Dialog {...{ open, onClose }} fullWidth>
-      <DialogTitle>Add Common Expense for {getMonth()}</DialogTitle>
+      <DialogTitle>Add Common Expenses</DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         <Form {...{ onClose }} />
       </DialogContent>

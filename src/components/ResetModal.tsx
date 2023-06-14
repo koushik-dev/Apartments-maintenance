@@ -11,21 +11,26 @@ import { updateCommon } from "../api";
 import { useAuth } from "../hooks/useAuth";
 import { ACTIONTYPES } from "../model";
 import { useStore } from "../Providers";
+import { Loader } from "./Loader";
 
 export const ResetModal = () => {
   const [state, dispatch] = useStore();
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const handleClose = (isAdd: boolean) => {
     if (isAdd) {
+      setLoading(true);
       updateCommon({
         ...state.commonDetails,
         expenses: [],
         commonAmount: 0,
         waterAmount: 0,
-      }).then((data) =>
-        dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
-      );
+      })
+        .then((data) =>
+          dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
+        )
+        .finally(() => setLoading(false));
     }
     setOpen(false);
   };
@@ -37,6 +42,7 @@ export const ResetModal = () => {
         </Button>
       ) : null}
       <Dialog open={open} onClose={() => handleClose(false)}>
+        {loading ? <Loader /> : null}
         <DialogTitle>Clearing Old Values</DialogTitle>
         <DialogContent dividers>
           <Typography>

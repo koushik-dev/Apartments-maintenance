@@ -51,17 +51,20 @@ export const Home = () => {
                 </Button>
               </Link>
             </>
-          ) : null}
-          <Link to="/apartments/maintenance">
-            <Button variant="contained" fullWidth>
-              Check my Maintenance Bill
-            </Button>
-          </Link>
-          <Link to="/apartments/people">
-            <Button variant="contained" fullWidth>
-              Show Apartments Residents
-            </Button>
-          </Link>
+          ) : (
+            <>
+              <Link to="/apartments/maintenance">
+                <Button variant="contained" fullWidth>
+                  Check my Maintenance Bill
+                </Button>
+              </Link>
+              <Link to="/apartments/people">
+                <Button variant="contained" fullWidth>
+                  Show Apartments Residents
+                </Button>
+              </Link>
+            </>
+          )}
         </Box>
       </Stack>
     </Stack>

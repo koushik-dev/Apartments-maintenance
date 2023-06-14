@@ -38,8 +38,9 @@ export const Maintenance = () => {
                       bottom: 24,
                       right: 24,
                       backgroundColor: "#8757d1",
+                      zIndex: 0,
                     }
-                  : { backgroundColor: "#8757d1" }
+                  : { backgroundColor: "#8757d1", zIndex: 0 }
               }
               onClick={() => navigate("/apartments/details")}
             >

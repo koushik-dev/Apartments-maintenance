@@ -8,3 +8,4 @@ export { ResetModal } from "./ResetModal";
 export { ExcelExport } from "./ExcelExport";
 export { MaintenanceCard } from "./MaintenanceCard";
 export { UserCard } from "./UserCard";
+export { Loader } from "./Loader";

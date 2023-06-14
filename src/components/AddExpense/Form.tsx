@@ -13,8 +13,10 @@ import { Controller, useForm } from "react-hook-form";
 import { updateCommon } from "../../api";
 import { ACTIONTYPES } from "../../model";
 import { useStore } from "../../Providers";
+import { Loader } from "../Loader";
 
 export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [loading, setLoading] = React.useState(false);
   const [state, dispatch] = useStore();
   const {
     register,
@@ -32,6 +34,7 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   });
 
   const onSubmit = (formValues: any) => {
+    setLoading(true);
     updateCommon({
       ...state.commonDetails,
       expenses: [
@@ -47,15 +50,18 @@ export const Form: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         : {
             commonAmount: state.commonDetails.commonAmount + +formValues.amount,
           }),
-    }).then((data) =>
-      dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
-    );
+    })
+      .then((data) =>
+        dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
+      )
+      .finally(() => setLoading(false));
     onClose();
   };
   const hasError = (id: string) => Object.keys(errors).includes(id);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {loading ? <Loader /> : null}
       <Stack gap={2} px={3} pb={3} pt={2}>
         <Controller
           control={control}

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { updateCommon } from "../api";
-import { AddExpenseModal, ResetModal } from "../components";
+import { AddExpenseModal, Loader, ResetModal } from "../components";
 import { getMonth } from "../constants";
 import { useAuth } from "../hooks/useAuth";
 import { useScreenSize } from "../hooks/useScreenSize";
@@ -24,6 +24,7 @@ export const Expenses = () => {
   const [{ commonDetails }, dispatch] = useStore();
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [action, setAction] = React.useState<{ type: string; payload?: any }>({
     type: "",
     payload: "",
@@ -42,6 +43,7 @@ export const Expenses = () => {
     amount: number;
     date: string;
   }) => {
+    setLoading(true);
     updateCommon({
       ...commonDetails,
       expenses: [...commonDetails.expenses].filter((exp) => {
@@ -58,10 +60,14 @@ export const Expenses = () => {
         : {
             commonAmount: commonDetails.commonAmount - expense.amount,
           }),
-    }).then((data) => {
-      dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] });
-      setOpen(false);
-    });
+    })
+      .then((data) => {
+        dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] });
+      })
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   return (
@@ -169,6 +175,7 @@ export const Expenses = () => {
           fullWidth
           onClose={() => setOpen(false)}
         >
+          {loading ? <Loader /> : null}
           <DialogTitle>{action.type} Confirmation</DialogTitle>
           <DialogContent dividers>
             Are you sure you want to {action.type.toLocaleLowerCase()} the

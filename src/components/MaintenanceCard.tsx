@@ -62,6 +62,7 @@ export const MaintenanceCard: React.FC<{
         <Fab
           disabled
           sx={{
+            zIndex: 0,
             "&.Mui-disabled": {
               background: "#aed9f1",
               color: "black",

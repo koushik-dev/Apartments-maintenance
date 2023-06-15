@@ -105,7 +105,7 @@ export const Expenses = () => {
                 Add Expense
               </Button>
             )}
-            <ResetModal />
+            {commonDetails.expenses.length ? <ResetModal /> : null}
           </Box>
         </Box>
         <Box
@@ -115,50 +115,58 @@ export const Expenses = () => {
           }}
           p={1}
         >
-          {commonDetails.expenses.map((exp, index) => (
-            <React.Fragment key={index}>
-              <Box display={"flex"} flexDirection={"column"} p={1}>
-                <Box display={"flex"} alignItems="center">
-                  <Typography variant="subtitle2" fontWeight={500} flex={1}>
-                    {exp.expense
-                      .split("_")
-                      .map((k) => k.charAt(0).toLocaleUpperCase() + k.slice(1))
-                      .join(" ")}
-                  </Typography>
-                  <Typography variant="body2" lineHeight={0}>
-                    Rs. {exp.amount}
-                  </Typography>
-                  {user?.isAdmin ? (
-                    <IconButton
-                      color="error"
-                      sx={{ border: "1px solid", ml: 2 }}
-                      onClick={() => {
-                        setOpen(true);
-                        setAction({ type: "Delete", payload: exp });
-                      }}
-                    >
-                      <Delete />
-                    </IconButton>
-                  ) : null}
-                </Box>
-                <Typography variant="body2" color="text.primary">
-                  {exp.reason}
+          {!commonDetails.expenses.length ? (
+            <Typography align="center">No Expenses made!</Typography>
+          ) : (
+            <>
+              {commonDetails.expenses.map((exp, index) => (
+                <React.Fragment key={index}>
+                  <Box display={"flex"} flexDirection={"column"} p={1}>
+                    <Box display={"flex"} alignItems="center">
+                      <Typography variant="subtitle2" fontWeight={500} flex={1}>
+                        {exp.expense
+                          .split("_")
+                          .map(
+                            (k) => k.charAt(0).toLocaleUpperCase() + k.slice(1)
+                          )
+                          .join(" ")}
+                      </Typography>
+                      <Typography variant="body2" lineHeight={0}>
+                        Rs. {exp.amount}
+                      </Typography>
+                      {user?.isAdmin ? (
+                        <IconButton
+                          color="error"
+                          sx={{ border: "1px solid", ml: 2 }}
+                          onClick={() => {
+                            setOpen(true);
+                            setAction({ type: "Delete", payload: exp });
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
+                      ) : null}
+                    </Box>
+                    <Typography variant="body2" color="text.primary">
+                      {exp.reason}
+                    </Typography>
+                    <Typography variant="body2" color="text.primary">
+                      {new Date(exp.date).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                  <Divider />
+                </React.Fragment>
+              ))}
+              <Box display={"flex"} alignItems="center" p={1}>
+                <Typography variant="h5" flex={1}>
+                  Total
                 </Typography>
-                <Typography variant="body2" color="text.primary">
-                  {new Date(exp.date).toLocaleDateString()}
+                <Typography variant="body1">
+                  Rs. {commonDetails.commonAmount + commonDetails.waterAmount}
                 </Typography>
               </Box>
-              <Divider />
-            </React.Fragment>
-          ))}
-          <Box display={"flex"} alignItems="center" p={1}>
-            <Typography variant="h5" flex={1}>
-              Total
-            </Typography>
-            <Typography variant="body1">
-              Rs. {commonDetails.commonAmount + commonDetails.waterAmount}
-            </Typography>
-          </Box>
+            </>
+          )}
         </Box>
 
         {/* Expense Modal */}

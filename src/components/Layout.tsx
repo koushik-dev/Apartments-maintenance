@@ -31,7 +31,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
       <Header />
       <Sidebar />
       <Stack flex={1} mt={8} overflow="scroll">
-        {loading === 0 ? <Loader /> : null}
+        {loading > 0 ? <Loader /> : null}
         <Box
           component="main"
           p={matches ? 3 : 1}

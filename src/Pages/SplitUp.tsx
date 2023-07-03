@@ -264,7 +264,16 @@ export const SplitUp = () => {
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <Button variant="contained" disabled={id !== user.flat}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: ({
+                      palette: {
+                        common: { black },
+                      },
+                    }) => black,
+                  }}
+                >
                   <Wallet />
                   &nbsp; Pay
                 </Button>
@@ -278,6 +287,7 @@ export const SplitUp = () => {
                 alt="image"
                 width="100%"
                 height={"auto"}
+                style={{ maxHeight: 320 }}
               />
             </Box>
           )}

@@ -1,0 +1,34 @@
+
+total water procured
+total water usage -> get all meter readings -> subtract it with old readings -> sum all readings after converting to litres
+using total usage, get the individual percentage
+using individual percentage, get the individual amount by multiplying with total water amount
+
+sewage / 6
+common / 6 -> add all common expenses
+
+Add validation for user modal
+login page
+RBAC for admin and others - Done
+edit maintenance to update details
+
+- adding user date not updated. - FIXED
+- not navigating after calculate - FIXED
+- water amount always 0 - FIXED
+- initial water readings are hardcoded - FIXED
+- update user info, flat info - FIXED
+- NEED LOADERS - FIXED
+- Back buttons in pages - FIXED
+- netlify redirects not working - FIXED
+- remove options for non admin users. - FIXED
+- Need reset button to reset values for the month, add unpaid amount to overdue_amount - FIXED
+- Need provision to add notification - On HOLD
+- Active page not set on sidebar - FIXED
+- PWA - FIXED
+- multiply water readings with 100 - FIXED
+- Show old month bills and should be able to add bills for current month - On HOLD
+- Change the maintenance layout to adapt for mobile screen - FIXED
+- Loading on login screen - FIXED
+- Payment trigger from maintenance page - FIXED
+- Trigger call to people - FIXED
+- Move water, common, total amount calculations to common place

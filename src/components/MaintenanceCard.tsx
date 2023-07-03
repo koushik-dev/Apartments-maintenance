@@ -21,7 +21,8 @@ export const MaintenanceCard: React.FC<{
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const updateDetails = () => {
+  const updateDetails = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
     const data = {
       flat: flat,
       payment_status: status === "paid" ? "pending" : "paid",
@@ -78,13 +79,26 @@ export const MaintenanceCard: React.FC<{
         {user.isAdmin ? (
           <Button
             variant="contained"
-            color={
-              status.toLocaleLowerCase() === "pending" ? "error" : "success"
-            }
+            sx={{
+              backgroundColor: (theme) =>
+                status.toLocaleLowerCase() === "pending"
+                  ? theme.palette.error.main
+                  : theme.palette.common.black,
+              fontWeight: 600,
+              fontSize: 16,
+            }}
             onClick={updateDetails}
           >
             {status.charAt(0).toLocaleUpperCase() + status.slice(1)}
           </Button>
+        ) : status.toLocaleLowerCase() !== "pending" ? (
+          <Typography
+            variant="h6"
+            color={(theme) => theme.palette.success.main}
+            fontWeight="600"
+          >
+            Paid
+          </Typography>
         ) : (
           <a
             href={
@@ -103,9 +117,14 @@ export const MaintenanceCard: React.FC<{
           >
             <Button
               variant="contained"
-              color="success"
-              disabled={flat !== user.flat}
-              sx={{ px: 1.5 }}
+              sx={{
+                px: 1.5,
+                backgroundColor: ({
+                  palette: {
+                    common: { black },
+                  },
+                }) => black,
+              }}
             >
               <Wallet />
               &nbsp; Pay

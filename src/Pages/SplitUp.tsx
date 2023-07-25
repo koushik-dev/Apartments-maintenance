@@ -11,11 +11,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getFlatTotalAmount, getMonth, UPI_URL } from "../constants";
 import { useAuth } from "../hooks/useAuth";
 import { useScreenSize } from "../hooks/useScreenSize";
+import { useWaterReadings } from "../hooks/useWaterReading";
 import { useStore } from "../Providers";
 
 export const SplitUp = () => {
@@ -23,6 +24,7 @@ export const SplitUp = () => {
     waterAmount: number;
     commonAmount: number;
   }>({ waterAmount: 0, commonAmount: 0 });
+  const [localState, setLocalState] = useState<any>({});
   const navigate = useNavigate();
   const isMobile450 = useScreenSize() < 450;
   const isMobile1080 = useScreenSize() < 1080;
@@ -34,8 +36,24 @@ export const SplitUp = () => {
     details: {},
   });
   const [{ flatDetails, commonDetails }] = useStore();
+  const { calculate } = useWaterReadings(
+    flatDetails.reduce((a, f) => ({ ...a, ...f.water_reading.previous }), {})
+  );
   const { user } = useAuth();
   const { id = "" } = useParams();
+
+  useEffect(() => {
+    if (flatDetails.length > 2)
+      setLocalState(
+        calculate(
+          flatDetails.reduce(
+            (a, f) => ({ ...a, ...f.water_reading.current }),
+            {}
+          )
+        )
+      );
+  }, [flatDetails]);
+
   const expenseDetails = [
     {
       description: "Total Water load purchased",
@@ -83,12 +101,12 @@ export const SplitUp = () => {
           </IconButton>
         </Tooltip>
       ),
-      quantity: commonDetails.individual_water_usage[id],
+      quantity: localState?.individual_water_usage?.[id],
       price: "",
     },
     {
       description: `${id} - Total water consumption (percentage)`,
-      quantity: commonDetails.individual_water_percentages[id],
+      quantity: localState?.individual_water_percentages?.[id],
       price: "",
     },
     {
@@ -96,12 +114,12 @@ export const SplitUp = () => {
       quantity:
         commonDetails.waterAmount +
         " * " +
-        commonDetails.individual_water_percentages[id]?.toFixed(6) +
+        localState?.individual_water_percentages?.[id]?.toFixed(6) +
         " / " +
         100,
       price: (
         commonDetails.waterAmount *
-          (commonDetails.individual_water_percentages[id] / 100) || 0
+          (localState?.individual_water_percentages?.[id] / 100) || 0
       ).toFixed(1),
     },
     {
@@ -144,7 +162,7 @@ export const SplitUp = () => {
       price: (
         getFlatTotalAmount(
           flat?.details?.overdue_amount,
-          commonDetails.individual_water_percentages[id],
+          localState?.individual_water_percentages?.[id],
           commonDetails.waterAmount,
           commonDetails.commonAmount
         ) || 0
@@ -172,11 +190,11 @@ export const SplitUp = () => {
     setAmount({
       waterAmount: Math.round(
         commonDetails.waterAmount *
-          ((commonDetails.individual_water_percentages[id] || 0) / 100)
+          ((localState?.individual_water_percentages?.[id] || 0) / 100)
       ),
       commonAmount: +(commonDetails.commonAmount / 6).toFixed(0),
     });
-  }, [commonDetails]);
+  }, [commonDetails, localState]);
   return (
     <Stack flex={1} gap={2}>
       <Box display={"flex"} alignItems="center">

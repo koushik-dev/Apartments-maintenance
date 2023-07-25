@@ -3,26 +3,21 @@ import { CommonExpense } from "../model";
 
 type Reading = Record<string, number>;
 
-export const useWaterReadings: (
-  oldReadings: Reading,
-  newReadings: Reading
-) => { calculate: () => Partial<CommonExpense> } = (
-  oldReadings,
-  newReadings
-) => {
+export const useWaterReadings: (oldReadings: Reading) => {
+  calculate: (newReadings: Reading) => Partial<CommonExpense>;
+} = (oldReadings) => {
   const getPercentage = (total: number, actual: number) => {
     return +((actual / total) * 100).toFixed(2);
   };
 
-  const calculate = () => {
+  const calculate = (newReadings: Reading) => {
     const pipelines = Object.keys(newReadings);
-    let totalReadings: Reading = {};
-    pipelines.map((line) => {
-      const index = line.match(/[0-9]/)?.["index"] || -1;
-      const flat = line.slice(0, index + 1);
-      const sum = totalReadings[flat] ?? 0;
-      totalReadings[flat] = sum + (newReadings[line] - oldReadings[line]);
-    });
+    let totalReadings: Reading = { F1: 0, F2: 0, F3: 0, S1: 0, S2: 0, S3: 0 };
+    pipelines.map(
+      (line) =>
+        (totalReadings[line.slice(0, 2)] +=
+          newReadings[line] - oldReadings[line])
+    );
     const total_water_usage = Object.values(totalReadings).reduce(
       (a: number, v: number) => a + v,
       0

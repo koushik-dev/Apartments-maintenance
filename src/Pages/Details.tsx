@@ -42,8 +42,7 @@ const Details = () => {
     state.flatDetails.reduce(
       (acc, flat) => ({ ...acc, ...flat.water_reading.previous }),
       {}
-    ),
-    waterLines
+    )
   );
 
   const handleCalculate = () => {
@@ -63,7 +62,7 @@ const Details = () => {
         dispatch({ type: ACTIONTYPES.FLATDETAILS, payload: data })
       )
       .then((_) => {
-        let details = calculate();
+        const details = calculate(waterLines);
         updateCommon({ ...state.commonDetails, ...details })
           .then((data) =>
             dispatch({ type: ACTIONTYPES.COMMONDETAILS, payload: data[0] })
